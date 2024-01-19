@@ -1,4 +1,4 @@
-# algafood-api
+# PetApi
 
 ## Resumo
 ### Hexagonal Architecture
@@ -20,29 +20,33 @@ O contrato informa ao consumidor qual deve ser a comunicação de solicitação 
 
 Para a gerar o contract first, vamos utilizar o openapi code generator para gerar nossa camada de application com delegate pattern.
 
-    <plugin>
-        <groupId>org.openapitools</groupId>
-        <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>5.1.0</version>
-        <executions>
-            <execution>
-                <goals>
-                    <goal>generate</goal>
-                </goals>
-                <configuration>
-                    <inputSpec>
-                        ${project.basedir}/src/main/resources/swagger/openapi.yaml
-                    </inputSpec>
-                    <generatorName>spring</generatorName>
-                    <apiPackage>${swagger.basePackage}</apiPackage>
-                    <modelPackage>${swagger.modelPackage}</modelPackage>
-                    <supportingFilesToGenerate>
-                        ApiUtil.java
-                    </supportingFilesToGenerate>
-                    <configOptions>
-                        <delegatePattern>true</delegatePattern>
-                    </configOptions>
-                </configuration>
-            </execution>
-        </executions>
-    </plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>6.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								${project.basedir}/src/main/resources/swagger/openapi.yaml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<supportingFilesToGenerate>
+								ApiUtil.java
+							</supportingFilesToGenerate>
+							<modelNameSuffix>Representation</modelNameSuffix>
+							<library>spring-boot</library>
+							<configOptions>
+								<basePackage>${package}</basePackage>
+								<apiPackage>${package}.presentation</apiPackage>
+								<modelPackage>${package}.presentation.representation</modelPackage>
+								<delegatePattern>true</delegatePattern>
+								<interfaceOnly>false</interfaceOnly>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
