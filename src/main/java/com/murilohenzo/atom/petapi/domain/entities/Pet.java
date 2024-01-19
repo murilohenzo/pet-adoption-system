@@ -1,4 +1,4 @@
-package com.murilo.algafoodapi.domain.entities;
+package com.murilohenzo.atom.petapi.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

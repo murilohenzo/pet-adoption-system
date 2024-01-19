@@ -1,9 +1,9 @@
-package com.murilo.algafoodapi.infrastracture.config;
+package com.murilohenzo.atom.petapi.infrastracture.config;
 
-import com.murilo.algafoodapi.adapters.rest.PetsApiDelegateImpl;
-import com.murilo.algafoodapi.domain.mapper.PetMapper;
-import com.murilo.algafoodapi.domain.service.PetService;
-import com.murilo.algafoodapi.infrastracture.repository.PetRepository;
+import com.murilohenzo.atom.petapi.adapters.rest.PetsApiDelegateImpl;
+import com.murilohenzo.atom.petapi.domain.mapper.PetMapper;
+import com.murilohenzo.atom.petapi.domain.service.PetService;
+import com.murilohenzo.atom.petapi.infrastracture.repository.PetRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

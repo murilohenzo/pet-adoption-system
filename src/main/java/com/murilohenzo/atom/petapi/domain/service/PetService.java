@@ -1,7 +1,7 @@
-package com.murilo.algafoodapi.domain.service;
+package com.murilohenzo.atom.petapi.domain.service;
 
-import com.murilo.algafoodapi.domain.entities.Pet;
-import com.murilo.algafoodapi.infrastracture.repository.PetRepository;
+import com.murilohenzo.atom.petapi.domain.entities.Pet;
+import com.murilohenzo.atom.petapi.infrastracture.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PetService {

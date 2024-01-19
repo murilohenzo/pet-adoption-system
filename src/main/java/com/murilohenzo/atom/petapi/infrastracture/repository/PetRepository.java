@@ -1,6 +1,6 @@
-package com.murilo.algafoodapi.infrastracture.repository;
+package com.murilohenzo.atom.petapi.infrastracture.repository;
 
-import com.murilo.algafoodapi.domain.entities.Pet;
+import com.murilohenzo.atom.petapi.domain.entities.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

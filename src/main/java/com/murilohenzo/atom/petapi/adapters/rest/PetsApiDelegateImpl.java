@@ -1,10 +1,10 @@
-package com.murilo.algafoodapi.adapters.rest;
+package com.murilohenzo.atom.petapi.adapters.rest;
 
-import com.murilo.algafoodapi.domain.mapper.PetMapper;
-import com.murilo.algafoodapi.domain.service.PetService;
-import com.murilo.algafoodapi.presentation.PetApiDelegate;
-import com.murilo.algafoodapi.presentation.representation.ApiResponseRepresentation;
-import com.murilo.algafoodapi.presentation.representation.PetRepresentation;
+import com.murilohenzo.atom.petapi.domain.mapper.PetMapper;
+import com.murilohenzo.atom.petapi.domain.service.PetService;
+import com.murilohenzo.atom.petapi.presentation.PetApiDelegate;
+import com.murilohenzo.atom.petapi.presentation.representation.ApiResponseRepresentation;
+import com.murilohenzo.atom.petapi.presentation.representation.PetRepresentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
