@@ -1,10 +1,14 @@
 package com.murilohenzo.atom.petapi.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.ArrayList;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,34 +23,32 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(nullable = false)
     private String name;
 
-    @ElementCollection
-    private List<String> photoUrls = new ArrayList<>();
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<PetPhoto> photos;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.PENDING;
 
-    public enum Status {
-        AVAILABLE, PENDING, SOLD
-    }
+    @CreatedDate
+    private Instant createdAt;
+
+    @LastModifiedDate
+    private Instant updatedAt;
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return getId() != null && Objects.equals(getId(), pet.getId());
+        return Objects.equals(id, pet.id) && Objects.equals(name, pet.name) && Objects.equals(photos, pet.photos) && status == pet.status && Objects.equals(createdAt, pet.createdAt) && Objects.equals(updatedAt, pet.updatedAt);
     }
 
     @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    public int hashCode() {
+        return Objects.hash(id, name, photos, status, createdAt, updatedAt);
     }
 }
-

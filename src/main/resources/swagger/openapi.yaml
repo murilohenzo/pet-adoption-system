@@ -18,7 +18,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Pet'
+              $ref: '#/components/schemas/PetResponse'
         required: true
       responses:
         '200':
@@ -26,7 +26,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/PetResponse'
         '400':
           description: Invalid ID supplied
         '404':
@@ -41,19 +41,14 @@ paths:
       description: Add a new pet to the store
       operationId: addPet
       requestBody:
-        description: Create a new pet in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Pet'
-        required: true
+        $ref: '#/components/requestBodies/Pet'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/PetResponse'
         '405':
           description: Invalid input
       security: []
@@ -85,7 +80,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Pet'
+                  $ref: '#/components/schemas/PetResponse'
         '400':
           description: Invalid status value
       security: []
@@ -110,7 +105,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/PetResponse'
         '400':
           description: Invalid ID supplied
         '404':
@@ -165,7 +160,7 @@ paths:
       responses:
         '400':
           description: Invalid pet value
-  /pet/{petId}/uploadImage:
+  /pet/{petId}/photo:
     post:
       tags:
         - pet
@@ -180,12 +175,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: additionalMetadata
-          in: query
-          description: Additional Metadata
-          required: false
-          schema:
-            type: string
       requestBody:
         content:
           multipart/form-data:
@@ -193,18 +182,35 @@ paths:
               type: object
               properties:
                 file:
-                  type: string
-                  format: binary
+                  type: array
+                  items:
+                    type: string
+                    format: binary
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetPhotoResponse'
 components:
   schemas:
-    Pet:
+    PetRequest:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        name:
+          type: string
+          example: doggie
+        photoUrls:
+          type: array
+          items:
+            type: string
+    PetResponse:
       required:
         - name
         - photoUrls
@@ -228,20 +234,48 @@ components:
             - available
             - pending
             - sold
-    ApiResponse:
+    Problem:
       type: object
       properties:
-        code:
+        statusCode:
           type: integer
           format: int32
-        type:
+        title:
           type: string
         message:
           type: string
+    PetPhotoRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        size:
+          type: long
+        contentType:
+          type: string
+    PetPhotoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the photo
+        petId:
+          type: integer
+          format: int64
+          description: ID of the Pet associated with the photo
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date of the photo
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update date of the photo
   requestBodies:
     Pet:
       description: Pet object that needs to be added to the store
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Pet'
+            $ref: '#/components/schemas/PetRequest'

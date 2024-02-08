@@ -14,16 +14,9 @@ server:
     whitelabel:
       enabled: false
   datasource:
-    url: jdbc:h2:mem:ms-spring?useSSL=false&serverTimezone=UTC
-    driverClassName: org.h2.Driver
-  jpa:
-    show-sql: false
-    open-in-view: false
-    properties:
-      hibernate:
-        ddl-auto: true
-        format-sql: false
-    database-platform: org.hibernate.dialect.H2Dialect
+    jdbcUrl: jdbc:h2:mem:ms-spring?useSSL=false&serverTimezone=UTC
+    username: sa
+    password: 12345
 management:
   server:
     port: 9090
