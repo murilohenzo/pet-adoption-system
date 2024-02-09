@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -96,7 +97,7 @@
 			<version>${openapi.version}</version>
 		</dependency>
 
-        <!-- openapi code generator	-->
+		<!-- openapi code generator	-->
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
@@ -185,26 +186,26 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
+				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
-                        <id>copy-jar</id>
+						<id>copy-jar</id>
 						<phase>install</phase>
 						<goals>
-                            <goal>copy</goal>
+							<goal>copy</goal>
 						</goals>
 						<configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>./docker</outputDirectory>
-                                    <destFileName>${project.artifactId}.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>./docker</outputDirectory>
+									<destFileName>${project.artifactId}.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
 						</configuration>
 					</execution>
 				</executions>
