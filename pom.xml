@@ -152,6 +152,7 @@
 								<modelPackage>${package}.presentation.representation</modelPackage>
 								<delegatePattern>true</delegatePattern>
 								<interfaceOnly>false</interfaceOnly>
+								<dateLibrary>java11</dateLibrary>
 							</configOptions>
 						</configuration>
 					</execution>

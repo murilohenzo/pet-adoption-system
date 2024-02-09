@@ -1,10 +1,13 @@
 openapi: 3.0.3
 info:
-  title: Swagger Pets - OpenAPI 3.0
+  title: Pets API
   version: 0.0.1
 tags:
   - name: pet
     description: Everything about your Pets
+servers:
+  - url: http://localhost:8080/
+    description: Localhost server
 paths:
   /pet:
     put:
@@ -105,7 +108,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PetResponse'
+                $ref: '#/components/schemas/PetWithPhotos'
         '400':
           description: Invalid ID supplied
         '404':
@@ -200,16 +203,21 @@ components:
     PetRequest:
       required:
         - name
-        - photoUrls
       type: object
       properties:
         name:
           type: string
-          example: doggie
-        photoUrls:
-          type: array
-          items:
-            type: string
+          example: java
+        description:
+          type: string
+          example: This dog is very beautiful
+          maxLength: 250
+        gender:
+          type: string
+          example: FEMALE
+          enum:
+            - FEMALE
+            - MALE
     PetResponse:
       required:
         - name
@@ -223,10 +231,6 @@ components:
         name:
           type: string
           example: doggie
-        photoUrls:
-          type: array
-          items:
-            type: string
         status:
           type: string
           description: pet status in the store
@@ -234,6 +238,17 @@ components:
             - available
             - pending
             - sold
+        description:
+          type: string
+          maxLength: 250
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date of the pet
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update date of the pet
     Problem:
       type: object
       properties:
@@ -264,6 +279,9 @@ components:
           type: integer
           format: int64
           description: ID of the Pet associated with the photo
+        photoUrl:
+          type: string
+          description: Photo url
         createdAt:
           type: string
           format: date-time
@@ -272,6 +290,33 @@ components:
           type: string
           format: date-time
           description: Last update date of the photo
+    PetWithPhotos:
+      type: object
+      properties:
+        name:
+          type: string
+          example: java
+        description:
+          type: string
+          example: This dog is very beautiful
+          maxLength: 250
+        gender:
+          type: string
+          example: FEMALE
+          enum:
+            - FEMALE
+            - MALE
+        photos:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+                format: int64
+                description: ID of the photo
+              photoUrl:
+                type: string
+                description: Photo url
   requestBodies:
     Pet:
       description: Pet object that needs to be added to the store

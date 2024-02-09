@@ -7,14 +7,14 @@ import com.murilohenzo.atom.petapi.presentation.PetApiDelegate;
 import com.murilohenzo.atom.petapi.presentation.representation.PetPhotoResponseRepresentation;
 import com.murilohenzo.atom.petapi.presentation.representation.PetRequestRepresentation;
 import com.murilohenzo.atom.petapi.presentation.representation.PetResponseRepresentation;
+import com.murilohenzo.atom.petapi.presentation.representation.PetWithPhotosRepresentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class PetsApiDelegateImpl implements PetApiDelegate {
@@ -37,14 +37,19 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
     @Override
     public ResponseEntity<List<PetResponseRepresentation>> findPetsByStatus(String status) {
         var pets = petService.findPetsByStatus(petMapper.toStatus(status))
-                .stream().map(petMapper::toRepresentation).collect(Collectors.toList());
+                .stream().map(petMapper::toRepresentation).toList();
         return ResponseEntity.ok(pets);
     }
 
     @Override
-    public ResponseEntity<PetResponseRepresentation> getPetById(Long petId) {
+    public ResponseEntity<PetWithPhotosRepresentation> getPetById(Long petId) {
         var pet = petService.findById(petId);
-        return pet.map(value -> ResponseEntity.ok(petMapper.toRepresentation(value))).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
+        if (pet.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return pet.map(value -> ResponseEntity.ok(petMapper.toPetWithPhotosRepresentation(value))).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Override
@@ -67,13 +72,12 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
 
         var photos = petPhotoService.create(pet.get(), file);
 
-        // TODO: Verificar o createdAt e adicionar datelibrary dentro do openapi generator
-
         var photosRepresentation = photos.stream().map(p -> {
             PetPhotoResponseRepresentation petPhotoResponseRepresentation = new PetPhotoResponseRepresentation();
             petPhotoResponseRepresentation.setId(p.getId());
             petPhotoResponseRepresentation.setPetId(p.getPet().getId());
-            petPhotoResponseRepresentation.setCreatedAt(OffsetDateTime.now());
+            petPhotoResponseRepresentation.setCreatedAt(Date.from(p.getCreatedAt()));
+            petPhotoResponseRepresentation.setPhotoUrl(p.getPhotoUrl());
             return petPhotoResponseRepresentation;
         }).toList();
 

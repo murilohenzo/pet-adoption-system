@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -41,12 +39,21 @@ public class PetPhoto {
     @Column(nullable = false)
     private String photoUrl;
 
-    @CreatedDate
+    @Column(name = "created_at", updatable = false)
     private Instant createdAt;
 
-    @LastModifiedDate
+    @Column(name = "updated_at", updatable = true)
     private Instant updatedAt;
 
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

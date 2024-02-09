@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
 import java.util.List;
@@ -26,18 +24,33 @@ public class Pet {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
-    @ToString.Exclude
+    @Column(nullable = false, length = 250)
+    private String description;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PetPhoto> photos;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
-    @CreatedDate
+    @Column
+    private Gender gender;
+
+    @Column(name = "created_at", updatable = false)
     private Instant createdAt;
 
-    @LastModifiedDate
+    @Column(name = "updated_at", updatable = true)
     private Instant updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
+    }
 
     @Override
     public boolean equals(Object o) {
