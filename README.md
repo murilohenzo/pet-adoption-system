@@ -1,4 +1,4 @@
-# PetApi
+# PetStoreApi
 
 ## Resumo
 
