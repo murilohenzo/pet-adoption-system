@@ -4,6 +4,6 @@ import com.murilohenzo.atom.petapi.domain.entities.PetPhoto;
 
 public interface PetPhotoRepository {
 
-    PetPhoto save(PetPhoto photo);
+  PetPhoto save(PetPhoto photo);
 
 }

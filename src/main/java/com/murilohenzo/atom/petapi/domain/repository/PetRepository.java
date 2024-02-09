@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface PetRepository {
 
-    List<Pet> findByStatus(Status status);
+  List<Pet> findByStatus(Status status);
 
-    Optional<Pet> findById(Long id);
+  Optional<Pet> findById(Long id);
 
-    Pet save(Pet pet);
+  Pet save(Pet pet);
 
-    void update(Pet pet);
+  void update(Pet pet);
 
-    void delete(Long id);
+  void delete(Long id);
 }

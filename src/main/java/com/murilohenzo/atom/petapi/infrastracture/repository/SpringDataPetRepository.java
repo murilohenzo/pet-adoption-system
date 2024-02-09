@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SpringDataPetRepository extends JpaRepository<Pet, Long> {
-    List<Pet> findByStatus(Status status);
+  List<Pet> findByStatus(Status status);
 }

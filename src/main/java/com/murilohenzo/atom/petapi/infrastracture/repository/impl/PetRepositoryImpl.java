@@ -12,31 +12,31 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PetRepositoryImpl implements PetRepository {
 
-    private final SpringDataPetRepository repository;
+  private final SpringDataPetRepository repository;
 
-    @Override
-    public Pet save(Pet pet) {
-        return repository.save(pet);
-    }
+  @Override
+  public Pet save(Pet pet) {
+    return repository.save(pet);
+  }
 
-    @Override
-    public void update(Pet pet) {
+  @Override
+  public void update(Pet pet) {
 
-    }
+  }
 
-    @Override
-    public void delete(Long id) {
+  @Override
+  public void delete(Long id) {
 
-    }
+  }
 
-    @Override
-    public Optional<Pet> findById(Long petId) {
-        return repository.findById(petId);
-    }
+  @Override
+  public Optional<Pet> findById(Long petId) {
+    return repository.findById(petId);
+  }
 
-    @Override
-    public List<Pet> findByStatus(Status status) {
-        return repository.findByStatus(status);
-    }
+  @Override
+  public List<Pet> findByStatus(Status status) {
+    return repository.findByStatus(status);
+  }
 
 }

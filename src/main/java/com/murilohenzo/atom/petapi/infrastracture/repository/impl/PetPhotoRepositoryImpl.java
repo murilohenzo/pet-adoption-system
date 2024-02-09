@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PetPhotoRepositoryImpl implements PetPhotoRepository {
 
-    private final SpringDataPetPhotoRepository petPhotoRepository;
+  private final SpringDataPetPhotoRepository petPhotoRepository;
 
-    @Override
-    public PetPhoto save(PetPhoto photo) {
-        return this.petPhotoRepository.save(photo);
-    }
+  @Override
+  public PetPhoto save(PetPhoto photo) {
+    return this.petPhotoRepository.save(photo);
+  }
 
 }

@@ -12,20 +12,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PetService {
 
-    private final PetRepository repository;
+  private final PetRepository repository;
 
-    @Transactional
-    public Pet create(Pet pet) {
-        return repository.save(pet);
-    }
+  @Transactional
+  public Pet create(Pet pet) {
+    return repository.save(pet);
+  }
 
-    @Transactional(readOnly = true)
-    public List<Pet> findPetsByStatus(Status status) {
-        return repository.findByStatus(status);
-    }
+  @Transactional(readOnly = true)
+  public List<Pet> findPetsByStatus(Status status) {
+    return repository.findByStatus(status);
+  }
 
-    @Transactional(readOnly = true)
-    public Optional<Pet> findById(Long petId) {
-        return repository.findById(petId);
-    }
+  @Transactional(readOnly = true)
+  public Optional<Pet> findById(Long petId) {
+    return repository.findById(petId);
+  }
 }
