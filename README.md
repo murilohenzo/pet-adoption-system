@@ -1,52 +1,49 @@
 # PetApi
 
 ## Resumo
-### Hexagonal Architecture
-A arquitetura hexagonal é um modelo de design de aplicativos de software em torno da lógica de domínio para isolá-la de fatores externos. A lógica de domínio é especificada em um núcleo de negócios, que chamaremos de parte interna, sendo o restante partes externas. O acesso à lógica de domínio a partir do exterior está disponível através de portas e adaptadores
 
-![Screenshot_1](https://user-images.githubusercontent.com/28688721/215502510-acab5f7d-e34c-44ed-85c9-c8f57f819812.png)
+### Arquitetura Hexagonal
 
-Através da camada de aplicação, o usuário ou qualquer outro programa interage com a aplicação. Essa área deve conter coisas como interfaces de usuário, controladores RESTful e bibliotecas de serialização JSON. Ele inclui qualquer coisa que exponha a entrada em nosso aplicativo e orquestre a execução da lógica de domínio.
+A **Arquitetura Hexagonal** é um modelo de design de aplicativos de software que promove a isolamento da lógica de domínio, localizada na parte interna (núcleo de negócios), de fatores externos. A comunicação com a lógica de domínio ocorre por meio de portas e adaptadores, garantindo uma separação clara entre as partes internas e externas da aplicação.
 
-Na camada de domínio, mantemos o código que toca e implementa a lógica de negócios. Este é o núcleo da nossa aplicação. Além disso, essa camada deve ser isolada da parte do aplicativo e da parte de infraestrutura. Além disso, ele também deve conter interfaces que definem a API para se comunicar com partes externas, como o banco de dados, com o qual o domínio interage.
+#### Componentes da Arquitetura Hexagonal:
 
-Por fim, a camada de infraestrutura é a parte que contém tudo o que o aplicativo precisa para funcionar, como configuração de banco de dados ou configuração do Spring. Além disso, ele também implementa interfaces dependentes de infraestrutura da camada de domínio.
+1. **Camada de Aplicação:**
+   - Interface pela qual usuários e outros programas interagem com a aplicação.
+   - Inclui elementos como interfaces de usuário, controladores RESTful e bibliotecas de serialização JSON.
+   - Responsável por expor a entrada na aplicação e orquestrar a execução da lógica de domínio.
 
-### Contract First
-Em uma abordagem Contract-First, você primeiro define o contrato e, em seguida, implementa o serviço.
-Quando começamos com o estabelecimento de um contrato, definimos um swagger e, em seguida, compartilhamos com nosso consumidor. Tudo isso pode acontecer antes mesmo de implementarmos o serviço e disponibilizá-lo.
+2. **Camada de Domínio:**
+   - Contém o código que implementa a lógica de negócios, sendo o núcleo da aplicação.
+   - Isolada das partes de aplicação e infraestrutura.
+   - Inclui interfaces que definem a API para comunicação com partes externas, como um banco de dados.
 
-O contrato informa ao consumidor qual deve ser a comunicação de solicitação e resposta. Uma vez que o contrato esteja em vigor, o provedor de serviços pode trabalhar na prestação de um serviço que adere ao contrato. O consumidor de serviço pode trabalhar no desenvolvimento de um aplicativo para consumi-lo.
+3. **Camada de Infraestrutura:**
+   - Contém todos os recursos necessários para o funcionamento da aplicação.
+   - Inclui configuração de banco de dados, configuração do Spring e implementações de interfaces dependentes de infraestrutura da camada de domínio.
 
-Para a gerar o contract first, vamos utilizar o openapi code generator para gerar nossa camada de application com delegate pattern.
+![hexagonal_architecture](https://github.com/murilohenzo/mono-to-micro/assets/28688721/467e9210-2584-4204-96e0-f4d8a36e9e78)
 
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.6.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>
-								${project.basedir}/src/main/resources/swagger/openapi.yaml
-							</inputSpec>
-							<generatorName>spring</generatorName>
-							<supportingFilesToGenerate>
-								ApiUtil.java
-							</supportingFilesToGenerate>
-							<modelNameSuffix>Representation</modelNameSuffix>
-							<library>spring-boot</library>
-							<configOptions>
-								<basePackage>${package}</basePackage>
-								<apiPackage>${package}.presentation</apiPackage>
-								<modelPackage>${package}.presentation.representation</modelPackage>
-								<delegatePattern>true</delegatePattern>
-								<interfaceOnly>false</interfaceOnly>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+### Dependency Inversion na Camada de Repository
+
+Na camada de infraestrutura, implementamos o princípio de **Dependency Inversion** na camada de Repository. Isso é alcançado por meio da criação de uma interface no domínio e uma implementação correspondente na camada de infraestrutura. Essa abordagem faz com que nosso serviço de domínio dependa de abstrações, não de implementações específicas, tornando o código mais flexível e adaptável a mudanças.
+
+### Contrato First
+
+A abordagem **Contract-First** envolve a definição do contrato antes da implementação do serviço. Um Swagger é criado e compartilhado com os consumidores, estabelecendo a comunicação esperada de solicitação e resposta. Isso permite que o provedor de serviços trabalhe na prestação de um serviço que adere ao contrato, enquanto o consumidor desenvolve um aplicativo para consumi-lo.
+
+Para gerar o contrato primeiro, utilizamos o **OpenAPI Code Generator**, que cria a camada de aplicação com o padrão Delegate. Este padrão permite a criação de classes intermediárias (delegates) que encaminham chamadas de métodos para a implementação real da lógica. Essa abordagem promove uma estrutura modular e flexível baseada no contrato definido pelo OpenAPI.
+
+### Padrão Delegate
+
+O **Padrão Delegate** (Delegate Pattern) é empregado na geração da camada de aplicação. Nesse padrão, um objeto delegante é responsável por encaminhar chamadas de métodos para um objeto delegado, promovendo a separação de responsabilidades, reusabilidade, flexibilidade e facilitando a manutenção do código.
+
+Principais vantagens do Padrão Delegate:
+
+1. **Separação de Responsabilidades:** O delegante controla o fluxo geral, enquanto o delegado se concentra na execução específica da lógica.
+  
+2. **Reusabilidade:** A lógica encapsulada no delegado pode ser reutilizada em diferentes contextos, promovendo modularidade.
+  
+3. **Flexibilidade:** Permite alterar o comportamento do delegante sem modificar sua própria implementação, apenas alterando o objeto delegado.
+
+4. **Manutenção mais Fácil:** Alterações na lógica específica podem ser realizadas no delegado sem afetar o delegante.
