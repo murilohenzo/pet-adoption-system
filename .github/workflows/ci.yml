@@ -23,7 +23,6 @@ jobs:
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
     - name: SonarQube
     - name: Jacoco Report to PR
-      id: jacoco
       uses: madrapps/jacoco-report@v1.6.1
       with:
         paths: ${{ github.workspace }}/target/jacoco/jacoco-resources/jacoco.xml
