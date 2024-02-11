@@ -1,0 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+localstorage:
+  enabled: true
+  path: localstorage-test

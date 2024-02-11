@@ -1,0 +1,34 @@
+name: ci-java-workflow
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ "master", "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'corretto'
+        cache: maven
+    - name: Build
+      run: mvn clean install -DskipTests
+    - name: Unit test
+      run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
+    - name: Jacoco Report to PR
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+        paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 80
+        min-coverage-changed-files: 80
+        continue-on-error: true
+        title: '# :lobster: Coverage Report'
+        pass-emoji: ':green_circle:'
+        fail-emoji: ':red_circle:'
