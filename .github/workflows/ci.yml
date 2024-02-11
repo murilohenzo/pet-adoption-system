@@ -23,12 +23,12 @@ jobs:
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
     - name: Analyze with SonarCloud
       uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
-      run: mvn sonar:sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
         SONAR_ORG_KEY: ${{ env.SONAR_ORG_KEY }}
+      run: mvn sonar:sonar
       with:
         args:
           -Dsonar.projectKey=SONAR_PROJECT_KEY
