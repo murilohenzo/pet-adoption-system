@@ -1,47 +1,39 @@
 package com.murilohenzo.atom.petapi.domain.entities;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.Instant;
 import java.util.Objects;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity(name = "tb_pet_photo")
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PetPhoto {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column
+  @Column(nullable = false)
   private String name;
 
-  @Column
-  private Integer size;
+  @Column(nullable = false)
+  private Long size;
 
-  @Column
+  @Column(nullable = false)
   private String contentType;
 
-  @Column
+  @Column(nullable = false)
   private String storageReferenceKey;
 
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name = "pet_id")
+  @ToString.Exclude
   private Pet pet;
 
   @Column(nullable = false)
@@ -65,19 +57,14 @@ public class PetPhoto {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     PetPhoto petPhoto = (PetPhoto) o;
-    return Objects.equals(id, petPhoto.id) && Objects.equals(name, petPhoto.name) && Objects.equals(size, petPhoto.size)
-        && Objects.equals(storageReferenceKey, petPhoto.storageReferenceKey) && Objects.equals(pet, petPhoto.pet)
-        && Objects.equals(photoUrl, petPhoto.photoUrl) && Objects.equals(createdAt, petPhoto.createdAt)
-        && Objects.equals(updatedAt, petPhoto.updatedAt);
+    return Objects.equals(id, petPhoto.id) && Objects.equals(name, petPhoto.name) && Objects.equals(size, petPhoto.size) && Objects.equals(contentType, petPhoto.contentType) && Objects.equals(storageReferenceKey, petPhoto.storageReferenceKey) && Objects.equals(pet, petPhoto.pet) && Objects.equals(photoUrl, petPhoto.photoUrl) && Objects.equals(createdAt, petPhoto.createdAt) && Objects.equals(updatedAt, petPhoto.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, size, storageReferenceKey, pet, photoUrl, createdAt, updatedAt);
+    return Objects.hash(id, name, size, contentType, storageReferenceKey, pet, photoUrl, createdAt, updatedAt);
   }
 }

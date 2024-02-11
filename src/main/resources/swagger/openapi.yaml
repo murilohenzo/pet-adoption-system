@@ -6,23 +6,43 @@ tags:
   - name: pet
     description: Everything about your Pets
 servers:
-  - url: http://localhost:8080/
+  - url: http://localhost:8080
     description: Localhost server
 paths:
   /pet:
+    post:
+      tags:
+        - pet
+      summary: Add a new pet to the store
+      operationId: addPet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '405':
+          description: Invalid input
+      x-inner-class: false
+
     put:
       tags:
         - pet
       summary: Update an existing pet
-      description: Update an existing pet by Id
       operationId: updatePet
       requestBody:
-        description: Update an existent pet in the store
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PetResponse'
-        required: true
       responses:
         '200':
           description: Successful operation
@@ -34,38 +54,17 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Pet not found
-        '405':
-          description: Validation exception
-      security: []
-    post:
-      tags:
-        - pet
-      summary: Add a new pet to the store
-      description: Add a new pet to the store
-      operationId: addPet
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PetResponse'
-        '405':
-          description: Invalid input
-      security: []
+      x-inner-class: false
   /pet/findByStatus:
     get:
       tags:
         - pet
       summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
       operationId: findPetsByStatus
       parameters:
         - name: status
           in: query
-          description: Status values that need to be considered for filter
+          description: "Status values that need to be considered for filter. Acceptable values: 'available', 'pending', 'sold'"
           required: false
           explode: true
           schema:
@@ -77,7 +76,7 @@ paths:
               - sold
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
               schema:
@@ -86,13 +85,12 @@ paths:
                   $ref: '#/components/schemas/PetResponse'
         '400':
           description: Invalid status value
-      security: []
+      x-inner-class: false
   /pet/{petId}:
     get:
       tags:
         - pet
       summary: Find pet by ID
-      description: Returns a single pet
       operationId: getPetById
       parameters:
         - name: petId
@@ -104,20 +102,21 @@ paths:
             format: int64
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PetWithPhotos'
+                $ref: '#/components/schemas/PetResponse'
         '400':
           description: Invalid ID supplied
         '404':
           description: Pet not found
+      x-inner-class: false
+
     post:
       tags:
         - pet
       summary: Updates a pet in the store with form data
-      description: ''
       operationId: updatePetWithForm
       parameters:
         - name: petId
@@ -140,11 +139,12 @@ paths:
       responses:
         '405':
           description: Invalid input
+      x-inner-class: false
+
     delete:
       tags:
         - pet
       summary: Deletes a pet
-      description: delete a pet
       operationId: deletePet
       parameters:
         - name: api_key
@@ -163,12 +163,12 @@ paths:
       responses:
         '400':
           description: Invalid pet value
+      x-inner-class: false
   /pet/{petId}/photo:
     post:
       tags:
         - pet
-      summary: uploads an image
-      description: ''
+      summary: Upload image
       operationId: uploadFile
       parameters:
         - name: petId
@@ -184,44 +184,77 @@ paths:
             schema:
               type: object
               properties:
-                file:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
+                image:
+                  type: string
+                  format: binary
+                  nullable: false
+                  required:
+                    - image
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PetPhotoResponse'
+                $ref: '#/components/schemas/PetPhotoResponse'
+        '400':
+          description: Invalid request payload
+      x-inner-class: false
+    get:
+      tags:
+        - pet
+      summary: Download image
+      operationId: downloadFile
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Image not found
+      x-inner-class: false
+
 components:
   schemas:
     PetRequest:
-      required:
-        - name
       type: object
       properties:
         name:
           type: string
           example: java
+          nullable: false
+          maxLength: 30
+          minimum: 10
         description:
           type: string
           example: This dog is very beautiful
           maxLength: 250
+          minimum: 50
+          nullable: false
         gender:
           type: string
+          nullable: false
           example: FEMALE
           enum:
             - FEMALE
             - MALE
-    PetResponse:
       required:
         - name
-        - photoUrls
+        - description
+        - gender
+      title: PetRequest
+    PetResponse:
       type: object
       properties:
         id:
@@ -233,7 +266,7 @@ components:
           example: doggie
         status:
           type: string
-          description: pet status in the store
+          description: Pet status in the store
           enum:
             - available
             - pending
@@ -249,25 +282,7 @@ components:
           type: string
           format: date-time
           description: Last update date of the pet
-    Problem:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          format: int32
-        title:
-          type: string
-        message:
-          type: string
-    PetPhotoRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        size:
-          type: long
-        contentType:
-          type: string
+      title: PetResponse
     PetPhotoResponse:
       type: object
       properties:
@@ -281,46 +296,41 @@ components:
           description: ID of the Pet associated with the photo
         photoUrl:
           type: string
-          description: Photo url
+          description: Photo URL
+        name:
+          type: string
+          description: Image name
+        size:
+          type: number
+          description: Image size
+        contentType:
+          type: string
+          description: Image content type
         createdAt:
           type: string
           format: date-time
-          description: Creation date of the photo
+          description: Photo creation date
+        storageReferenceKey:
+          type: string
+          description: Storage Reference Key
         updatedAt:
           type: string
           format: date-time
           description: Last update date of the photo
-    PetWithPhotos:
+
+    Problem:
       type: object
       properties:
-        name:
+        statusCode:
+          type: integer
+          format: int32
+        title:
           type: string
-          example: java
-        description:
+        message:
           type: string
-          example: This dog is very beautiful
-          maxLength: 250
-        gender:
+        path:
           type: string
-          example: FEMALE
-          enum:
-            - FEMALE
-            - MALE
-        photos:
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-                format: int64
-                description: ID of the photo
-              photoUrl:
-                type: string
-                description: Photo url
-  requestBodies:
-    Pet:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PetRequest'
+        timestamp:
+          type: string
+          format: date-time
+      title: Problem
