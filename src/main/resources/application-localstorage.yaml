@@ -1,0 +1,3 @@
+localstorage:
+  enabled: true
+  path: localstorage

@@ -1,25 +1,15 @@
 package com.murilohenzo.atom.petapi.domain.entities;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.Instant;
+import java.util.Objects;
 
 @Entity(name = "tb_pet")
 @Getter
@@ -32,14 +22,17 @@ public class Pet {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
+  @NotNull
+  @NotBlank
+  @Column(nullable = false, length = 30)
   private String name;
 
   @Column(nullable = false, length = 250)
   private String description;
 
-  @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  private List<PetPhoto> photos;
+  @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
+  @ToString.Exclude
+  private PetPhoto photo;
 
   @Enumerated(EnumType.STRING)
   private Status status = Status.PENDING;
@@ -65,17 +58,14 @@ public class Pet {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     Pet pet = (Pet) o;
-    return Objects.equals(id, pet.id) && Objects.equals(name, pet.name) && Objects.equals(photos, pet.photos)
-        && status == pet.status && Objects.equals(createdAt, pet.createdAt) && Objects.equals(updatedAt, pet.updatedAt);
+    return Objects.equals(id, pet.id) && Objects.equals(name, pet.name) && Objects.equals(description, pet.description) && Objects.equals(photo, pet.photo) && status == pet.status && gender == pet.gender && Objects.equals(createdAt, pet.createdAt) && Objects.equals(updatedAt, pet.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, photos, status, createdAt, updatedAt);
+    return Objects.hash(id, name, description, photo, status, gender, createdAt, updatedAt);
   }
 }

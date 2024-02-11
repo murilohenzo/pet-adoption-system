@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SpringDataPetRepository extends JpaRepository<Pet, Long> {
   List<Pet> findByStatus(Status status);
+
 }

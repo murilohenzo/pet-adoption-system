@@ -106,18 +106,7 @@
     <dependency>
       <groupId>io.swagger.parser.v3</groupId>
       <artifactId>swagger-parser</artifactId>
-      <version>2.1.19</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.validator</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>8.0.1.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>8.0.1</version>
-      <scope>provided</scope>
+      <version>2.1.20</version>
     </dependency>
     <dependency>
       <groupId>org.openapitools</groupId>
@@ -141,12 +130,9 @@
               <inputSpec>
                 ${project.basedir}/src/main/resources/swagger/openapi.yaml
               </inputSpec>
-              <generatorName>spring</generatorName>
-              <supportingFilesToGenerate>
-                ApiUtil.java
-              </supportingFilesToGenerate>
-              <modelNameSuffix>Representation</modelNameSuffix>
               <library>spring-boot</library>
+              <generatorName>spring</generatorName>
+              <modelNameSuffix>Representation</modelNameSuffix>
               <configOptions>
                 <basePackage>${package}</basePackage>
                 <apiPackage>${package}.presentation</apiPackage>
@@ -154,7 +140,19 @@
                 <delegatePattern>true</delegatePattern>
                 <interfaceOnly>false</interfaceOnly>
                 <dateLibrary>java11</dateLibrary>
+                <useBeanValidation>true</useBeanValidation>
+                <useSpringBoot3>true</useSpringBoot3>
+                <useJakartaEe>true</useJakartaEe>
               </configOptions>
+              <typeMappings>
+                <typeMapping>OffsetDateTime=LocalDateTime</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
+              </importMappings>
+              <supportingFilesToGenerate>
+                ApiUtil.java
+              </supportingFilesToGenerate>
             </configuration>
           </execution>
         </executions>

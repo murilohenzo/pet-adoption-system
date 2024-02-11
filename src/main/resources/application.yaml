@@ -1,8 +1,21 @@
-main:
-  banner-mode: "off"
-  allow-bean-definition-overriding: true
-beaninfo:
-  ignore: true
+spring:
+  application: pet-api
+  main:
+    banner-mode: "off"
+    allow-bean-definition-overriding: true
+  beaninfo:
+    ignore: true
+  jpa:
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    jdbcUrl: jdbc:h2:mem:ms-spring?useSSL=false&serverTimezone=UTC
+    username: sa
+    password: 12345
 server:
   port: 8080
   servlet:
@@ -13,10 +26,7 @@ server:
   error:
     whitelabel:
       enabled: false
-  datasource:
-    jdbcUrl: jdbc:h2:mem:ms-spring?useSSL=false&serverTimezone=UTC
-    username: sa
-    password: 12345
+    include-stacktrace: never
 management:
   server:
     port: 9090
@@ -27,9 +37,3 @@ management:
     web:
       exposure:
         include: info, health, metrics, prometheus, mappings
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui

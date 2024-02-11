@@ -34,3 +34,8 @@ build/
 
 ### Docker ###
 docker/*.jar
+
+### LocalStorage ###
+/localstorage
+localstorage/*.png
+localstorage/*jpg
