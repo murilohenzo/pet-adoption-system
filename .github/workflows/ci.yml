@@ -22,13 +22,14 @@ jobs:
     - name: Unit test
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
     - name: SonarQube
-      run: |
-        mvn sonar:sonar -Pcoverage \
-          -Dsonar.projectKey=murilohenzo_microservice-pet-store-api \
-          -Dsonar.organization=murilohenzo
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
-        SONAR_ORG_KEY: ${{ env.SONAR_ORG_KEY }}
-
+    - name: Jacoco Report to PR
+      id: jacoco
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+        paths: ${{ github.workspace }}/target/jacoco/jacoco-resources/jacoco.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 80
+        min-coverage-changed-files: 80
+        title: '# :lobster: Coverage Report'
+        pass-emoji: ':green_circle:'
+        fail-emoji: ':red_circle:'
