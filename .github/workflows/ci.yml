@@ -29,7 +29,7 @@ jobs:
       run: mvn clean install -DskipTests
     - name: Unit test
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
-    - name: Coverage Report
+    - name: Report tests
       uses: dorny/test-reporter@v1
       if: always()
       with:
@@ -37,3 +37,12 @@ jobs:
         path: ${{ github.workspace }}/target/surefire-reports/*.xml
         reporter: java-junit
         fail-on-error: true
+    - name: Check code coverage
+      run: |
+        MINIMUM_COVERAGE=80
+        ACTUAL_COVERAGE=$(awk -F" " '/Overall / {print $3}' target/site/jacoco/index.html | tr -d '%')
+        
+        if [ "$ACTUAL_COVERAGE" -lt "$MINIMUM_COVERAGE" ]; then
+          echo "Code coverage is below the minimum acceptable threshold of $MINIMUM_COVERAGE%."
+          exit 1
+        fi
