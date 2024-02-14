@@ -41,5 +41,5 @@ jobs:
         mvn sonar:sonar \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.organization=murilohenzo \
-          -Dsonar.projectKey=murilohenzo_microservice-pet-store-api
+          -Dsonar.projectKey=murilohenzo_microservice-pet-store-api \
           -DskipTests
