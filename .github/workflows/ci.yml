@@ -2,7 +2,7 @@ name: ci-java-workflow
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: [ "master", "main", "feature/*", "f/*", "hotfix/*" ]
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [ "master", "main" ]
