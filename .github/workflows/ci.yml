@@ -21,6 +21,8 @@ jobs:
       run: mvn clean install -DskipTests
     - name: Unit test
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
+    - name: Exists folder jacoco
+      run: cat ${{ github.workspace }}/target/site/jacoco
       #    - name: Jacoco Report to PR
       #      uses: madrapps/jacoco-report@v1.6.1
       #      with:
@@ -35,7 +37,7 @@ jobs:
     - name: Code Coverage Report
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: /home/runner/work/microservice-pet-store-api/target/site/jacoco/jacoco.xml
+        filename: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
         badge: true
         fail_below_min: true
         format: markdown
