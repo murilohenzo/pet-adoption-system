@@ -21,7 +21,14 @@ jobs:
         distribution: 'corretto'
         cache: maven
     - name: Validate Branch
+      env:
+        SONAR_PROJECT_ENV: ${{ env.SONAR_PROJECT_KEY }}
+        SONAR_PROJECT_VARS: ${{ vars.SONAR_PROJECT_KEY }}
       run: |
+        
+        echo "$SONAR_PROJECT_ENV"
+        echo "$SONAR_PROJECT_VARS"
+        
         current_branch=$(echo "${GITHUB_REF#refs/heads/}")
         echo $current_branch
         if [[ "$current_branch" != "master" && "$current_branch" != "main" && ! "$current_branch" =~ ^(f/|feature/|hotfix/) ]]; then
