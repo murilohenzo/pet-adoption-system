@@ -21,12 +21,12 @@ public class PetRepositoryImpl implements PetRepository {
 
   @Override
   public void update(Pet pet) {
-
+    repository.save(pet);
   }
 
   @Override
   public void delete(Long id) {
-
+    repository.deleteById(id);
   }
 
   @Override

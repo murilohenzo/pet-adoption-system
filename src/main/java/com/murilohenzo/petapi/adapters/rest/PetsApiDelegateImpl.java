@@ -26,32 +26,34 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
 
   @Override
   public ResponseEntity<PetResponseRepresentation> addPet(PetRequestRepresentation petRepresentation) {
-    var pet = petMapper.toRepresentation(this.petService.create(petMapper.toEntityPet(petRepresentation)));
+    var pet = petMapper.toPetResponseRepresentation(this.petService.create(petMapper.toEntityPet(petRepresentation)));
     return ResponseEntity.status(HttpStatus.CREATED).body(pet);
   }
 
   @Override
-  public ResponseEntity<Void> deletePet(Long petId, String apiKey) {
-    return PetApiDelegate.super.deletePet(petId, apiKey);
+  public ResponseEntity<Void> deletePet(Long petId) {
+    petService.deletePetById(petId);
+    return ResponseEntity.noContent().build();
   }
 
   @Override
   public ResponseEntity<List<PetResponseRepresentation>> findPetsByStatus(String status) {
     var pets = petService.findPetsByStatus(petMapper.toStatus(status))
-        .stream().map(petMapper::toRepresentation).toList();
+      .stream().map(petMapper::toPetResponseRepresentation).toList();
     return ResponseEntity.ok(pets);
   }
 
   @Override
   public ResponseEntity<PetResponseRepresentation> getPetById(Long petId) {
     var pet = petService.findById(petId);
-    return pet.map(value -> ResponseEntity.ok(petMapper.toRepresentation(value)))
+    return pet.map(value -> ResponseEntity.ok(petMapper.toPetResponseRepresentation(value)))
       .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
   }
 
   @Override
-  public ResponseEntity<PetResponseRepresentation> updatePet(PetResponseRepresentation petRepresentation) {
-    return PetApiDelegate.super.updatePet(petRepresentation);
+  public ResponseEntity<PetResponseRepresentation> updatePet(Long petId, PetRequestRepresentation petRequestRepresentation) {
+    var pet = petService.update(petId, petMapper.toEntityPet(petRequestRepresentation));
+    return ResponseEntity.ok(petMapper.toPetResponseRepresentation(pet));
   }
 
   @Override
@@ -80,7 +82,7 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
     }
 
     HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.CONTENT_TYPE, "image/jpg");
+    headers.add(HttpHeaders.CONTENT_TYPE, photo.get().mediaType().toString());
 
     ByteArrayResource resource = new ByteArrayResource(photo.get().image());
 

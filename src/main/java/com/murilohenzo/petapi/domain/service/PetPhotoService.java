@@ -26,9 +26,6 @@ public class PetPhotoService {
   @Transactional
   @SneakyThrows
   public PetPhoto create(Pet pet, MultipartFile file) {
-
-    // TODO: Adicionar logica de salva no S3 AWS e salvar no banco a referencia
-
     if (file.isEmpty()) {
       throw new FileNotFoundException("Image file is empty");
     }

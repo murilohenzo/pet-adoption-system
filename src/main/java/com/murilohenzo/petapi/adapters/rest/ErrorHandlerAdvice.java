@@ -1,6 +1,7 @@
 package com.murilohenzo.petapi.adapters.rest;
 
 import com.murilohenzo.petapi.presentation.representation.ProblemRepresentation;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
@@ -83,6 +84,22 @@ public class ErrorHandlerAdvice {
     problem.setPath(request.getRequestURI());
     problem.setTimestamp(Date.from(Instant.now()));
     problem.setTitle("invalid.content.type");
+
+    return ResponseEntity.status(status).body(problem);
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<ProblemRepresentation> entityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
+    var status = HttpStatus.NOT_FOUND;
+
+    log.debug("[D95] - EntityNotFoundException:{}", e.getMessage());
+
+    ProblemRepresentation problem = new ProblemRepresentation();
+    problem.setMessage(e.getMessage());
+    problem.setStatusCode(status.value());
+    problem.setPath(request.getRequestURI());
+    problem.setTimestamp(Date.from(Instant.now()));
+    problem.setTitle("entity.not.found");
 
     return ResponseEntity.status(status).body(problem);
   }

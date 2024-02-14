@@ -31,30 +31,6 @@ paths:
         '405':
           description: Invalid input
       x-inner-class: false
-
-    put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      operationId: updatePet
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PetResponse'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PetResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      x-inner-class: false
   /pet/findByStatus:
     get:
       tags:
@@ -112,7 +88,6 @@ paths:
         '404':
           description: Pet not found
       x-inner-class: false
-
     post:
       tags:
         - pet
@@ -140,19 +115,12 @@ paths:
         '405':
           description: Invalid input
       x-inner-class: false
-
     delete:
       tags:
         - pet
       summary: Deletes a pet
       operationId: deletePet
       parameters:
-        - name: api_key
-          in: header
-          description: ''
-          required: false
-          schema:
-            type: string
         - name: petId
           in: path
           description: Pet id to delete
@@ -163,6 +131,37 @@ paths:
       responses:
         '400':
           description: Invalid pet value
+      x-inner-class: false
+    put:
+      tags:
+        - pet
+      summary: Update an existing pet
+      operationId: updatePet
+      parameters:
+        - name: petId
+          in: path
+          description: Pet id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
       x-inner-class: false
   /pet/{petId}/photo:
     post:

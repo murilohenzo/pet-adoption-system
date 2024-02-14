@@ -43,7 +43,7 @@ public class Pet {
   @Column(name = "created_at", updatable = false)
   private Instant createdAt;
 
-  @Column(name = "updated_at", updatable = true)
+  @Column(name = "updated_at")
   private Instant updatedAt;
 
   @PrePersist

@@ -13,7 +13,8 @@ import org.mapstruct.Mapping;
 public interface PetMapper {
 
   public Pet toEntityPet(PetRequestRepresentation petRepresentation);
-  public PetResponseRepresentation toRepresentation(Pet pet);
+
+  public PetResponseRepresentation toPetResponseRepresentation(Pet pet);
 
   @Mapping(source = "pet.id", target = "petId")
   public PetPhotoResponseRepresentation toPetPhotosRepresentation(PetPhoto petPhoto);
