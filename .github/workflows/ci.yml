@@ -20,7 +20,7 @@ jobs:
         java-version: '21'
         distribution: 'corretto'
         cache: maven
-    - name: Validate branch
+    - name: Validate
       run: |
         current_branch=$(echo "${GITHUB_REF#refs/heads/}")
         echo $current_branch
@@ -32,21 +32,14 @@ jobs:
       run: mvn clean install -DskipTests
     - name: Unit test
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
-    - name: Report tests
-      uses: dorny/test-reporter@v1
-      if: always()
-      with:
-        name: Maven Tests
-        path: ${{ github.workspace }}/target/surefire-reports/*.xml
-        reporter: java-junit
-        fail-on-error: true
     - name: Sonar Cloud
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
         SONAR_ORG: ${{ env.SONAR_ORG_KEY }}
       run: |
-        mvn verify sonar:sonar \
+        mvn sonar:sonar \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.organization=murilohenzo \
           -Dsonar.projectKey=murilohenzo_microservice-pet-store-api
+          -DskipTests
