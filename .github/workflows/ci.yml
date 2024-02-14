@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: ci
-      url: https://github.com
+    #    environment:
+    #      name: ci
+    #      url: https://github.com
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 21
@@ -42,7 +42,7 @@ jobs:
         fail-on-error: true
     - name: Sonar Cloud
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_PROJECT_KEY }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
         SONAR_ORG: ${{ env.SONAR_ORG_KEY }}
       run: |
