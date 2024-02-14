@@ -25,6 +25,8 @@ jobs:
       run: ls -la ${{ github.workspace }}/target/site/jacoco
     - name: Get current branch
       run: echo "Current branch is ${{ github.ref }}"
+    - name: Extract branch name
+      run: echo "Current branch is $(echo ${GITHUB_REF#refs/heads/})"
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
