@@ -20,6 +20,7 @@ jobs:
     - name: Validate branch
       run: |
         current_branch=$(echo "${GITHUB_REF#refs/heads/}")
+        echo $current_branch
         if [[ "$current_branch" != "master" && "$current_branch" != "main" && ! "$current_branch" =~ ^(f/|feature/|hotfix/) ]]; then
           echo "Error: Invalid branch name. Branch names must start with 'f/', 'feature/', or 'hotfix/'."
           exit 1
