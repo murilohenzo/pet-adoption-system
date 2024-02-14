@@ -27,8 +27,14 @@ jobs:
       run: echo "Current branch is ${{ github.ref }}"
     - name: Extract branch name
       run: echo "Current branch is $(echo ${GITHUB_REF#refs/heads/})"
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    - name: Coverage Report
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+        paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 80
+        min-coverage-changed-files: 80
+        continue-on-error: true
+        title: '# :lobster: Coverage Report'
+        pass-emoji: ':green_circle:'
+        fail-emoji: ':red_circle:'
