@@ -23,6 +23,8 @@ jobs:
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
     - name: Exists folder jacoco
       run: ls -la ${{ github.workspace }}/target/site/jacoco
+    - name: Get current branch
+      run: echo "Current branch is ${{ github.ref }}"
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
