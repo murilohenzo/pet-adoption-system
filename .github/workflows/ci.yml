@@ -17,16 +17,17 @@ jobs:
         java-version: '21'
         distribution: 'corretto'
         cache: maven
+    - name: Validate branch
+      run: |
+        current_branch=$(echo "${GITHUB_REF#refs/heads/}")
+        if [[ "$current_branch" != "master" && "$current_branch" != "main" && ! "$current_branch" =~ ^(f/|feature/|hotfix/) ]]; then
+          echo "Error: Invalid branch name. Branch names must start with 'f/', 'feature/', or 'hotfix/'."
+          exit 1
+        fi
     - name: Build
       run: mvn clean install -DskipTests
     - name: Unit test
       run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
-    - name: Exists folder jacoco
-      run: ls -la ${{ github.workspace }}/target/site/jacoco
-    - name: Get current branch
-      run: echo "Current branch is ${{ github.ref }}"
-    - name: Extract branch name
-      run: echo "Current branch is $(echo ${GITHUB_REF#refs/heads/})"
     - name: Coverage Report
       uses: madrapps/jacoco-report@v1.6.1
       with:
