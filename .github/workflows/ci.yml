@@ -43,7 +43,7 @@ jobs:
     - name: Sonar Cloud
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_PROJECT_KEY }}
-        SONAR_PROJECT_KEY: ${{ env.SONAR_ORG_KEY }}
+        SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
         SONAR_ORG: ${{ env.SONAR_ORG_KEY }}
       run: |
         mvn verify sonar:sonar \
