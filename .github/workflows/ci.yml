@@ -38,8 +38,7 @@ jobs:
         SONAR_PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
         SONAR_ORG: ${{ env.SONAR_ORG_KEY }}
       run: |
-        mvn sonar:sonar \
+        mvn verify sonar:sonar \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.organization=murilohenzo \
-          -Dsonar.projectKey=murilohenzo_microservice-pet-store-api \
-          -DskipTests
+          -Dsonar.projectKey=murilohenzo_microservice-pet-store-api
