@@ -17,6 +17,10 @@ jobs:
         java-version: '21'
         distribution: 'corretto'
         cache: maven
+    - name: Install xmlstarlet
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xmlstarlet
     - name: Validate branch
       run: |
         current_branch=$(echo "${GITHUB_REF#refs/heads/}")
@@ -40,8 +44,7 @@ jobs:
     - name: Check code coverage
       run: |
         MINIMUM_COVERAGE=80
-        ACTUAL_COVERAGE=$(awk -F" " '/Overall / {print $3}' target/site/jacoco/index.html | tr -d '%')
-        
+        ACTUAL_COVERAGE=$(xmlstarlet sel -t -v "//counter[@type='INSTRUCTION']/@covered" -n target/site/jacoco/jacoco.xml)
         if [ "$ACTUAL_COVERAGE" -lt "$MINIMUM_COVERAGE" ]; then
           echo "Code coverage is below the minimum acceptable threshold of $MINIMUM_COVERAGE%."
           exit 1
