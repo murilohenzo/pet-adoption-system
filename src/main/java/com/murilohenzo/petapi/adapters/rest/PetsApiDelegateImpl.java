@@ -32,7 +32,7 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
 
   @Override
   public ResponseEntity<Void> deletePet(Long petId) {
-    petService.deletePetById(petId);
+    petService.delete(petId);
     return ResponseEntity.noContent().build();
   }
 

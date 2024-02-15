@@ -31,7 +31,7 @@ public class PetService {
   }
 
   @Transactional
-  public void deletePetById(Long petId) {
+  public void delete(Long petId) {
     var existsPet = repository.findById(petId);
     if (existsPet.isEmpty()) {
       throw new EntityNotFoundException("Not found pet with id: " + petId);
