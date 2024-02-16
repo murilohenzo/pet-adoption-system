@@ -57,11 +57,6 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Void> updatePetWithForm(Long petId, String name, String status) {
-    return PetApiDelegate.super.updatePetWithForm(petId, name, status);
-  }
-
-  @Override
   public ResponseEntity<PetPhotoResponseRepresentation> uploadFile(Long petId, MultipartFile image) {
     var pet = petService.findById(petId);
 

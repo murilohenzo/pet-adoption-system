@@ -93,15 +93,7 @@ class PetsApiDelegateImplTest {
   @Test
   void givenNonExistingPetIdAndValidPetRequest_whenUpdatePet_thenShouldThrowException() {
   }
-
-  @Test
-  void givenValidPetIdAndFormData_whenUpdatePetWithForm_thenShouldReturnUpdatedPet() {
-  }
-
-  @Test
-  void givenInvalidPetIdOrInvalidFormData_whenUpdatePetWithForm_thenShouldThrowException() {
-  }
-
+  
   @Test
   void givenExistingPetIdAndValidImage_whenUploadFile_thenShouldReturnStatusOkWithPhoto() {
   }
