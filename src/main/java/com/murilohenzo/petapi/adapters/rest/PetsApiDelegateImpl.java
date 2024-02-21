@@ -3,7 +3,7 @@ package com.murilohenzo.petapi.adapters.rest;
 import com.murilohenzo.petapi.domain.mapper.PetMapper;
 import com.murilohenzo.petapi.domain.service.PetPhotoService;
 import com.murilohenzo.petapi.domain.service.PetService;
-import com.murilohenzo.petapi.presentation.PetApiDelegate;
+import com.murilohenzo.petapi.presentation.PetsApiDelegate;
 import com.murilohenzo.petapi.presentation.representation.PetPhotoResponseRepresentation;
 import com.murilohenzo.petapi.presentation.representation.PetRequestRepresentation;
 import com.murilohenzo.petapi.presentation.representation.PetResponseRepresentation;
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class PetsApiDelegateImpl implements PetApiDelegate {
+public class PetsApiDelegateImpl implements PetsApiDelegate {
 
   private final PetService petService;
   private final PetPhotoService petPhotoService;
@@ -26,7 +26,7 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
 
   @Override
   public ResponseEntity<PetResponseRepresentation> addPet(PetRequestRepresentation petRepresentation) {
-    var pet = petMapper.toPetResponseRepresentation(this.petService.create(petMapper.toEntityPet(petRepresentation)));
+    var pet = petMapper.toPetResponseRepresentation(petService.create(petMapper.toEntityPet(petRepresentation)));
     return ResponseEntity.status(HttpStatus.CREATED).body(pet);
   }
 
@@ -38,7 +38,7 @@ public class PetsApiDelegateImpl implements PetApiDelegate {
 
   @Override
   public ResponseEntity<List<PetResponseRepresentation>> findPetsByStatus(String status) {
-    var pets = petService.findPetsByStatus(petMapper.toStatus(status))
+    var pets = petService.findPetsByStatus(petMapper.toStatus(status.toUpperCase()))
       .stream().map(petMapper::toPetResponseRepresentation).toList();
     return ResponseEntity.ok(pets);
   }
