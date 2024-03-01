@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +55,7 @@ public class PetPhotoService {
 
   @SneakyThrows
   private static void contentTypeIsValid(String contentType) {
-    List<ContentType> contentTypes = Arrays.asList(ContentType.IMAGE_JPEG, ContentType.IMAGE_PNG);
+    var contentTypes = List.of(ContentType.IMAGE_JPEG, ContentType.IMAGE_PNG);
     if (!contentTypes.contains(ContentType.getByMimeType(contentType))) {
       throw new InvalidContentTypeException("ContentType invalid: " + contentType);
     }

@@ -1,8 +1,6 @@
 package com.murilohenzo.petapi.domain.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
@@ -21,8 +19,6 @@ public class Pet {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
-  @NotBlank
   @Column(nullable = false, length = 30)
   private String name;
 
@@ -34,7 +30,7 @@ public class Pet {
   private PetPhoto photo;
 
   @Enumerated(EnumType.STRING)
-  private Status status = Status.PENDING;
+  private Status status;
 
   @Column
   private Gender gender;

@@ -35,6 +35,7 @@ class PetServiceTest {
     // Then
     assertNotNull(pet);
     assertEquals(validPet.getName(), pet.getName());
+    assertEquals(Status.AVAILABLE, pet.getStatus());
     assertEquals(validPet.getDescription(), pet.getDescription());
   }
 

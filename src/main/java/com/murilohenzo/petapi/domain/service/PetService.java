@@ -17,6 +17,7 @@ public class PetService {
 
   @Transactional
   public Pet create(Pet pet) {
+    pet.setStatus(Status.AVAILABLE);
     return repository.save(pet);
   }
 

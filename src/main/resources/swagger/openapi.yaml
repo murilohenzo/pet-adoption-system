@@ -31,6 +31,22 @@ paths:
         '405':
           description: Invalid input
       x-inner-class: false
+    get:
+      tags:
+        - pet
+      summary: Find all pets
+      operationId: findAllPets
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PetResponse'
+        '400':
+          description: Invalid request payload
+      x-inner-class: false
   /pets/findByStatus:
     get:
       tags:
@@ -45,11 +61,10 @@ paths:
           explode: true
           schema:
             type: string
-            default: available
             enum:
-              - available
-              - pending
-              - sold
+              - AVAILABLE
+              - PENDING
+              - DONATED
       responses:
         '200':
           description: Successful operation
@@ -113,7 +128,7 @@ paths:
       parameters:
         - name: petId
           in: path
-          description: Pet id to delete
+          description: Pet id to update
           required: true
           schema:
             type: integer
@@ -240,9 +255,9 @@ components:
           type: string
           description: Pet status in the store
           enum:
-            - available
-            - pending
-            - sold
+            - AVAILABLE
+            - PENDING
+            - DONATED
         description:
           type: string
           maxLength: 250
