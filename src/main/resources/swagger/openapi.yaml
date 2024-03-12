@@ -225,7 +225,7 @@ components:
           minimum: 10
         description:
           type: string
-          example: This dog is very beautiful
+          example: This cat is very beautiful
           maxLength: 250
           minimum: 50
           nullable: false
@@ -236,10 +236,34 @@ components:
           enum:
             - FEMALE
             - MALE
+        species:
+          type: string
+          description: Pet specie
+          enum:
+            - CAT
+            - DOG
+          example: CAT
+        entryDate:
+          type: string
+          format: date
+          nullable: false
+        breed:
+          type: string
+          nullable: false
+          example: Persa
+        ageMoths:
+          type: integer
+          nullable: false
+          description: Age in months
+          example: 2
       required:
         - name
         - description
         - gender
+        - species
+        - entryDate
+        - breed
+        - ageMoths
       title: PetRequest
     PetResponse:
       type: object
@@ -258,9 +282,27 @@ components:
             - AVAILABLE
             - PENDING
             - DONATED
+        species:
+          type: string
+          description: Pet specie
+          enum:
+            - CAT
+            - DOG
+          example: CAT
         description:
           type: string
           maxLength: 250
+        breed:
+          type: string
+          nullable: false
+          example: Persa
+        ageMoths:
+          type: integer
+          description: Age in months
+        entryDate:
+          type: string
+          format: date
+          description: Check in date of the pet
         createdAt:
           type: string
           format: date-time
@@ -304,7 +346,6 @@ components:
           type: string
           format: date-time
           description: Last update date of the photo
-
     Problem:
       type: object
       properties:

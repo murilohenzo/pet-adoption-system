@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity(name = "tb_pet")
@@ -34,6 +35,18 @@ public class Pet {
 
   @Column
   private Gender gender;
+
+  @Enumerated(EnumType.STRING)
+  private Species species;
+
+  @Column(nullable = false, length = 30)
+  private String breed;
+
+  @Column(nullable = false)
+  private Integer ageMoths;
+
+  @Column(nullable = false)
+  private LocalDate entryDate;
 
   @Column(name = "created_at", updatable = false)
   private Instant createdAt;

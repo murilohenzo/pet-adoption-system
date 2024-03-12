@@ -5,7 +5,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +18,6 @@ import java.util.Date;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandlerAdvice {
-
-  @ExceptionHandler(JdbcSQLIntegrityConstraintViolationException.class)
-  public ResponseEntity<ProblemRepresentation> jdbcSQLIntegrityConstraintViolationException(JdbcSQLIntegrityConstraintViolationException e, HttpServletRequest request) {
-
-    var status = HttpStatus.BAD_REQUEST;
-
-    log.debug("[D28] - JdbcSQLIntegrityConstraintViolationException:{}", e.getMessage());
-
-    ProblemRepresentation problem = new ProblemRepresentation();
-    problem.setMessage("Database integrity error");
-    problem.setStatusCode(status.value());
-    problem.setPath(request.getRequestURI());
-    problem.setTimestamp(Date.from(Instant.now()));
-    problem.setTitle("constraint.violation");
-
-    return ResponseEntity.status(status).body(problem);
-  }
 
   @ExceptionHandler(JDBCConnectionException.class)
   public ResponseEntity<ProblemRepresentation> jDBCConnectionException(JDBCConnectionException e, HttpServletRequest request) {
