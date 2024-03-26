@@ -1,7 +1,7 @@
-package com.murilohenzo.petapi.core.ports;
+package com.murilohenzo.petapi.domain.ports;
 
-import com.murilohenzo.petapi.core.domain.PetDomain;
-import com.murilohenzo.petapi.core.domain.enums.Status;
+import com.murilohenzo.petapi.domain.models.PetDomain;
+import com.murilohenzo.petapi.domain.models.enums.Status;
 
 import java.util.List;
 import java.util.Optional;

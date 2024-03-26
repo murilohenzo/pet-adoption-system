@@ -1,4 +1,4 @@
-package com.murilohenzo.petapi.core.domain;
+package com.murilohenzo.petapi.domain.models;
 
 import org.springframework.http.MediaType;
 

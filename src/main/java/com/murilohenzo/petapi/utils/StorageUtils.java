@@ -1,4 +1,4 @@
-package com.murilohenzo.petapi.adapters.utils;
+package com.murilohenzo.petapi.utils;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

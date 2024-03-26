@@ -1,8 +1,8 @@
-package com.murilohenzo.petapi.core.domain;
+package com.murilohenzo.petapi.domain.models;
 
-import com.murilohenzo.petapi.core.domain.enums.Gender;
-import com.murilohenzo.petapi.core.domain.enums.Species;
-import com.murilohenzo.petapi.core.domain.enums.Status;
+import com.murilohenzo.petapi.domain.models.enums.Gender;
+import com.murilohenzo.petapi.domain.models.enums.Species;
+import com.murilohenzo.petapi.domain.models.enums.Status;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;

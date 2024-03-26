@@ -2,9 +2,9 @@ package com.murilohenzo.petapi.adapters.mapper;
 
 import com.murilohenzo.petapi.adapters.outbound.persistence.entities.PetEntity;
 import com.murilohenzo.petapi.adapters.outbound.persistence.entities.PetPhotoEntity;
-import com.murilohenzo.petapi.core.domain.PetDomain;
-import com.murilohenzo.petapi.core.domain.PetPhotoDomain;
-import com.murilohenzo.petapi.core.domain.enums.Status;
+import com.murilohenzo.petapi.domain.models.PetDomain;
+import com.murilohenzo.petapi.domain.models.PetPhotoDomain;
+import com.murilohenzo.petapi.domain.models.enums.Status;
 import com.murilohenzo.petapi.presentation.representation.PetPhotoResponseRepresentation;
 import com.murilohenzo.petapi.presentation.representation.PetRequestRepresentation;
 import com.murilohenzo.petapi.presentation.representation.PetResponseRepresentation;

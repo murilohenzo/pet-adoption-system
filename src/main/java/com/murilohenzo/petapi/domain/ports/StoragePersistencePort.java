@@ -1,4 +1,4 @@
-package com.murilohenzo.petapi.core.ports;
+package com.murilohenzo.petapi.domain.ports;
 
 import java.io.InputStream;
 

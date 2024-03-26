@@ -1,9 +1,9 @@
-package com.murilohenzo.petapi.core.domain.service;
+package com.murilohenzo.petapi.domain.models.service;
 
 import com.murilohenzo.petapi.builders.PetDomainBuilder;
-import com.murilohenzo.petapi.core.domain.enums.Status;
-import com.murilohenzo.petapi.core.ports.PetPersistencePort;
-import com.murilohenzo.petapi.core.service.PetServicePortImpl;
+import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
+import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

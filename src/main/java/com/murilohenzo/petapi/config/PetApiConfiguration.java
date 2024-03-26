@@ -1,4 +1,4 @@
-package com.murilohenzo.petapi.adapters.config;
+package com.murilohenzo.petapi.config;
 
 import com.murilohenzo.petapi.adapters.inbound.rest.PetsApiDelegateImpl;
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
@@ -7,12 +7,12 @@ import com.murilohenzo.petapi.adapters.outbound.persistence.PetPhotoJpaRepositor
 import com.murilohenzo.petapi.adapters.outbound.persistence.impl.LocalStoragePersistencePortImpl;
 import com.murilohenzo.petapi.adapters.outbound.persistence.impl.PetPersistencePortImpl;
 import com.murilohenzo.petapi.adapters.outbound.persistence.impl.PetPhotoPersistencePortImpl;
-import com.murilohenzo.petapi.adapters.utils.StorageUtils;
-import com.murilohenzo.petapi.core.ports.PetPersistencePort;
-import com.murilohenzo.petapi.core.ports.PetPhotoPersistencePort;
-import com.murilohenzo.petapi.core.ports.StoragePersistencePort;
-import com.murilohenzo.petapi.core.service.PetPhotoServicePortImpl;
-import com.murilohenzo.petapi.core.service.PetServicePortImpl;
+import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
+import com.murilohenzo.petapi.domain.ports.PetPhotoPersistencePort;
+import com.murilohenzo.petapi.domain.ports.StoragePersistencePort;
+import com.murilohenzo.petapi.domain.services.PetPhotoServicePortImpl;
+import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
+import com.murilohenzo.petapi.utils.StorageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Value;

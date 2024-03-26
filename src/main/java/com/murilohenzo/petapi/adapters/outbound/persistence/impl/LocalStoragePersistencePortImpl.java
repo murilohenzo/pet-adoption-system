@@ -1,6 +1,6 @@
 package com.murilohenzo.petapi.adapters.outbound.persistence.impl;
 
-import com.murilohenzo.petapi.core.ports.StoragePersistencePort;
+import com.murilohenzo.petapi.domain.ports.StoragePersistencePort;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

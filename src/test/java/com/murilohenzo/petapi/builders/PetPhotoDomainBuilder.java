@@ -1,7 +1,7 @@
 package com.murilohenzo.petapi.builders;
 
 import com.murilohenzo.petapi.adapters.outbound.persistence.entities.PetEntity;
-import com.murilohenzo.petapi.core.domain.PetPhotoDomain;
+import com.murilohenzo.petapi.domain.models.PetPhotoDomain;
 import lombok.Builder;
 
 import java.util.UUID;

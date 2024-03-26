@@ -1,10 +1,10 @@
-package com.murilohenzo.petapi.core.service;
+package com.murilohenzo.petapi.domain.services;
 
-import com.murilohenzo.petapi.core.domain.PetDomain;
-import com.murilohenzo.petapi.core.domain.PetPhotoDomain;
-import com.murilohenzo.petapi.core.domain.PetPhotoRecord;
-import com.murilohenzo.petapi.core.ports.PetPhotoPersistencePort;
-import com.murilohenzo.petapi.core.ports.StoragePersistencePort;
+import com.murilohenzo.petapi.domain.models.PetDomain;
+import com.murilohenzo.petapi.domain.models.PetPhotoDomain;
+import com.murilohenzo.petapi.domain.models.PetPhotoRecord;
+import com.murilohenzo.petapi.domain.ports.PetPhotoPersistencePort;
+import com.murilohenzo.petapi.domain.ports.StoragePersistencePort;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.http.entity.ContentType;

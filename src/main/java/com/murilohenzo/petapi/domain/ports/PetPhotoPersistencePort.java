@@ -1,6 +1,6 @@
-package com.murilohenzo.petapi.core.ports;
+package com.murilohenzo.petapi.domain.ports;
 
-import com.murilohenzo.petapi.core.domain.PetPhotoDomain;
+import com.murilohenzo.petapi.domain.models.PetPhotoDomain;
 
 import java.util.Optional;
 import java.util.UUID;

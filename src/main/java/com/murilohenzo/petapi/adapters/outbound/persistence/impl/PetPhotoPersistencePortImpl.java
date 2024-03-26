@@ -2,8 +2,8 @@ package com.murilohenzo.petapi.adapters.outbound.persistence.impl;
 
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetPhotoJpaRepository;
-import com.murilohenzo.petapi.core.domain.PetPhotoDomain;
-import com.murilohenzo.petapi.core.ports.PetPhotoPersistencePort;
+import com.murilohenzo.petapi.domain.models.PetPhotoDomain;
+import com.murilohenzo.petapi.domain.ports.PetPhotoPersistencePort;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;

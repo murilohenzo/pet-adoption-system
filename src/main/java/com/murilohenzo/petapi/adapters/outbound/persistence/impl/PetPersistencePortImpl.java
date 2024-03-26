@@ -2,9 +2,9 @@ package com.murilohenzo.petapi.adapters.outbound.persistence.impl;
 
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetJpaRepository;
-import com.murilohenzo.petapi.core.domain.PetDomain;
-import com.murilohenzo.petapi.core.domain.enums.Status;
-import com.murilohenzo.petapi.core.ports.PetPersistencePort;
+import com.murilohenzo.petapi.domain.models.PetDomain;
+import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

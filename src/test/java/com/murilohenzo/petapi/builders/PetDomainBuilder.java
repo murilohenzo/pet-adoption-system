@@ -1,8 +1,8 @@
 package com.murilohenzo.petapi.builders;
 
-import com.murilohenzo.petapi.core.domain.PetDomain;
-import com.murilohenzo.petapi.core.domain.enums.Gender;
-import com.murilohenzo.petapi.core.domain.enums.Status;
+import com.murilohenzo.petapi.domain.models.PetDomain;
+import com.murilohenzo.petapi.domain.models.enums.Gender;
+import com.murilohenzo.petapi.domain.models.enums.Status;
 import lombok.Builder;
 
 import java.util.UUID;

@@ -1,8 +1,8 @@
-package com.murilohenzo.petapi.core.service;
+package com.murilohenzo.petapi.domain.services;
 
-import com.murilohenzo.petapi.core.domain.PetDomain;
-import com.murilohenzo.petapi.core.domain.enums.Status;
-import com.murilohenzo.petapi.core.ports.PetPersistencePort;
+import com.murilohenzo.petapi.domain.models.PetDomain;
+import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

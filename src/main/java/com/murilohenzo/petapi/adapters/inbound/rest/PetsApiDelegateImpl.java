@@ -1,8 +1,8 @@
 package com.murilohenzo.petapi.adapters.inbound.rest;
 
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
-import com.murilohenzo.petapi.core.service.PetPhotoServicePortImpl;
-import com.murilohenzo.petapi.core.service.PetServicePortImpl;
+import com.murilohenzo.petapi.domain.services.PetPhotoServicePortImpl;
+import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
 import com.murilohenzo.petapi.presentation.PetsApiDelegate;
 import com.murilohenzo.petapi.presentation.representation.PetPhotoResponseRepresentation;
 import com.murilohenzo.petapi.presentation.representation.PetRequestRepresentation;

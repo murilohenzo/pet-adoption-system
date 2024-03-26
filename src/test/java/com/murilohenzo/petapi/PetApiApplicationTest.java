@@ -1,6 +1,6 @@
 package com.murilohenzo.petapi;
 
-import com.murilohenzo.petapi.adapters.utils.StorageUtils;
+import com.murilohenzo.petapi.utils.StorageUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
