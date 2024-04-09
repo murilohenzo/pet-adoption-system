@@ -3,7 +3,7 @@ package com.murilohenzo.petapi.adapters.outbound.persistence.impl;
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetJpaRepository;
 import com.murilohenzo.petapi.domain.models.PetDomain;
-import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
 import lombok.RequiredArgsConstructor;
 
@@ -40,8 +40,23 @@ public class PetPersistencePortImpl implements PetPersistencePort {
   }
 
   @Override
-  public List<PetDomain> findByStatus(Status status) {
-    return repository.findByStatus(status).stream().map(petMapper::petEntityToPetDomain).toList();
+  public List<PetDomain> findAll() {
+    return repository.findAll().stream().map(petMapper::petEntityToPetDomain).toList();
+  }
+
+  @Override
+  public List<PetDomain> findByStatus(PetStatus petStatus) {
+    return repository.findByPetStatus(petStatus).stream().map(petMapper::petEntityToPetDomain).toList();
+  }
+
+  @Override
+  public void deletePetByUserId(UUID userID) {
+    repository.deletePetByUserId(userID);
+  }
+
+  @Override
+  public List<PetDomain> findAllByUserId(UUID userID) {
+    return repository.findAllByUser_Id(userID).stream().map(petMapper::petEntityToPetDomain).toList();
   }
 
 }

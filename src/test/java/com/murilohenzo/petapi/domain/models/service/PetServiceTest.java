@@ -1,7 +1,7 @@
 package com.murilohenzo.petapi.domain.models.service;
 
 import com.murilohenzo.petapi.builders.PetDomainBuilder;
-import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
 import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -37,7 +37,7 @@ class PetServiceTest {
     // Then
     assertNotNull(pet);
     assertEquals(validPet.getName(), pet.getName());
-    assertEquals(Status.AVAILABLE, pet.getStatus());
+    assertEquals(PetStatus.AVAILABLE, pet.getPetStatus());
     assertEquals(validPet.getDescription(), pet.getDescription());
   }
 
@@ -46,8 +46,8 @@ class PetServiceTest {
     // Given
     var expectedPets = List.of(PetDomainBuilder.builder().build().pet());
     // When
-    when(petRepository.findByStatus(Status.AVAILABLE)).thenReturn(expectedPets);
-    var pets = petService.findPetsByStatus(Status.AVAILABLE);
+    when(petRepository.findByStatus(PetStatus.AVAILABLE)).thenReturn(expectedPets);
+    var pets = petService.findPetsByStatus(PetStatus.AVAILABLE);
     // Then
     assertNotNull(pets);
     assertFalse(pets.isEmpty());

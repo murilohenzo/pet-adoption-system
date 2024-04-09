@@ -32,7 +32,7 @@ public class PetRequestRepresentationBuilder {
     petRequestRepresentation.setSpecies(PetRequestRepresentation.SpeciesEnum.CAT);
     petRequestRepresentation.setBreed(breed);
     petRequestRepresentation.setEntryDate(Date.from(clock.instant()));
-    petRequestRepresentation.setAgeMoths(2);
+    petRequestRepresentation.setAgeMonths(2);
     petRequestRepresentation.setGender(PetRequestRepresentation.GenderEnum.FEMALE);
 
     return petRequestRepresentation;
