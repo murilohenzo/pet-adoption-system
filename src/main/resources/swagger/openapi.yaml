@@ -101,7 +101,7 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: PetEntity not found
+          description: Pet not found
       x-inner-class: false
     delete:
       tags:
@@ -111,7 +111,7 @@ paths:
       parameters:
         - name: petId
           in: path
-          description: PetEntity id to delete
+          description: Pet id to delete
           required: true
           schema:
             type: string
@@ -132,7 +132,7 @@ paths:
       parameters:
         - name: petId
           in: path
-          description: PetEntity id to update
+          description: Pet id to update
           required: true
           schema:
             type: string
@@ -153,7 +153,7 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: PetEntity not found
+          description: Pet not found
       x-inner-class: false
   /pets/{petId}/photo:
     post:
@@ -298,7 +298,7 @@ components:
             - MALE
         species:
           type: string
-          description: PetEntity specie
+          description: Pet specie
           enum:
             - CAT
             - DOG
@@ -343,11 +343,18 @@ components:
             - DONATED
         species:
           type: string
-          description: PetEntity specie
+          description: specie
           enum:
             - CAT
             - DOG
           example: CAT
+        gender:
+          type: string
+          description: gender
+          enum:
+            - FEMALE
+            - MALE
+          example: FEMALE
         description:
           type: string
           maxLength: 250
@@ -355,7 +362,7 @@ components:
           type: string
           nullable: false
           example: Persa
-        ageMoths:
+        ageMonths:
           type: integer
           description: Age in months
         entryDate:
@@ -381,7 +388,7 @@ components:
         petId:
           type: string
           format: uuid
-          description: ID of the PetEntity associated with the photo
+          description: ID of the Pet associated with the photo
         photoUrl:
           type: string
           description: Photo URL
