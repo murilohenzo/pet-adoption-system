@@ -1,5 +1,21 @@
 # Pet Adoption System
 
+## Diagrama de Solução
+
+![SISTEMA_ADOCAO_PET-DIAGRAMA_GERAL](https://github.com/murilohenzo/pet-adoption-system/assets/28688721/b8aba5a4-f84a-457c-a5cd-1761dd08a244)
+
+## Fluxo de Cadastro de Ssuário 
+
+![SISTEMA_ADOCAO_PET-FLUXO_CADASTRO_USUARIO](https://github.com/murilohenzo/pet-adoption-system/assets/28688721/fb580e11-4a4a-4c5b-8516-c555901771e3)
+
+## Fluxo de Adoção de Animais
+
+![SISTEMA_ADOCAO_PET-FLUXO_ADOCAO_DE_PET](https://github.com/murilohenzo/pet-adoption-system/assets/28688721/d1cae7d3-2d1f-4752-ab61-0a68e27f7227)
+
+## Fluxo de Segurança
+
+![SISTEMA_ADOCAO_PET_DIAGRAMA_SEGURANCA](https://github.com/murilohenzo/pet-adoption-system/assets/28688721/cbb84ea8-f5c7-4bd2-b8bc-9ba85891112d)
+
 ## Design Arquitetural usado pelos microservices
 
 ### Arquitetura Hexagonal (Ports and Adapters)
