@@ -1,6 +1,6 @@
-# PetStoreApi
+# Pet Adoption System
 
-## Resumo
+## Design Arquitetural usado pelos microservices
 
 ### Arquitetura Hexagonal (Ports and Adapters)
 
