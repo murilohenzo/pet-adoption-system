@@ -1,6 +1,7 @@
 package com.murilohenzo.petapi.adapters.inbound.rest;
 
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
+import com.murilohenzo.petapi.adapters.mapper.PetPhotoMapper;
 import com.murilohenzo.petapi.domain.services.PetPhotoServicePortImpl;
 import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
 import com.murilohenzo.petapi.presentation.PetsApiDelegate;
@@ -24,6 +25,7 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
   private final PetServicePortImpl petService;
   private final PetPhotoServicePortImpl petPhotoService;
   private final PetMapper petMapper;
+  private final PetPhotoMapper petPhotoMapper;
 
   @Override
   public ResponseEntity<PetResponseRepresentation> addPet(PetRequestRepresentation petRepresentation) {
@@ -66,7 +68,7 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
     }
 
     var photo = petPhotoService.create(pet.get(), image);
-    var photosRepresentation = petMapper.petPhotoDomainToPetPhotosRepresentation(photo);
+    var photosRepresentation = petPhotoMapper.petPhotoDomainToPetPhotosRepresentation(photo);
     return ResponseEntity.ok().body(photosRepresentation);
   }
 
@@ -86,5 +88,21 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
       .headers(headers)
       .contentType(photo.get().mediaType())
       .body(resource);
+  }
+
+  @Override
+  public ResponseEntity<Void> petAdoption(UUID petId, UUID userId) {
+    petService.adoptionPet(petId, userId);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  public ResponseEntity<List<PetResponseRepresentation>> findAllPets() {
+    return ResponseEntity.ok(petService.findAll().stream().map(petMapper::petDomainToPetResponseRepresentation).toList());
+  }
+
+  @Override
+  public ResponseEntity<List<PetResponseRepresentation>> findAdoptedPetsByUser(UUID userId) {
+    return ResponseEntity.ok(petService.findAllPetsByUser(userId).stream().map(petMapper::petDomainToPetResponseRepresentation).toList());
   }
 }

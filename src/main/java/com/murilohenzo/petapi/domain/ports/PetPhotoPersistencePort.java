@@ -6,7 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PetPhotoPersistencePort {
-  PetPhotoDomain save(PetPhotoDomain photo);
 
+  PetPhotoDomain save(PetPhotoDomain photo);
   Optional<PetPhotoDomain> findPetPhotoByPetId(UUID id);
+  
 }

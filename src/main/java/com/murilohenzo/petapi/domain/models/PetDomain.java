@@ -1,8 +1,8 @@
 package com.murilohenzo.petapi.domain.models;
 
-import com.murilohenzo.petapi.domain.models.enums.Gender;
-import com.murilohenzo.petapi.domain.models.enums.Species;
-import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.models.enums.PetGender;
+import com.murilohenzo.petapi.domain.models.enums.PetSpecies;
+import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -19,12 +19,14 @@ public class PetDomain {
   private String description;
   @ToString.Exclude
   private PetPhotoDomain petPhotoDomain;
-  private Status status;
-  private Gender gender;
-  private Species species;
+  private PetStatus petStatus;
+  private PetGender petGender;
+  private PetSpecies petSpecies;
   private String breed;
-  private Integer ageMoths;
+  private Integer ageMonths;
   private LocalDate entryDate;
+  @ToString.Exclude
+  private UserRefDomain user;
   private Instant createdAt;
   private Instant updatedAt;
 }

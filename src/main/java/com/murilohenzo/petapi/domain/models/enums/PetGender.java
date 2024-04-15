@@ -1,6 +1,6 @@
 package com.murilohenzo.petapi.domain.models.enums;
 
-public enum Gender {
+public enum PetGender {
   FEMALE,
   MALE
 }

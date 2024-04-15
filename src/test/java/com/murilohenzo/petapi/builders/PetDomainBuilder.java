@@ -1,8 +1,8 @@
 package com.murilohenzo.petapi.builders;
 
 import com.murilohenzo.petapi.domain.models.PetDomain;
-import com.murilohenzo.petapi.domain.models.enums.Gender;
-import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.models.enums.PetGender;
+import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import lombok.Builder;
 
 import java.util.UUID;
@@ -20,18 +20,18 @@ public class PetDomainBuilder {
   private String description = "Uma gatinha pequena e muito sapeca";
 
   @Builder.Default
-  private Gender gender = Gender.FEMALE;
+  private PetGender petGender = PetGender.FEMALE;
 
   @Builder.Default
-  private Status status = Status.AVAILABLE;
+  private PetStatus petStatus = PetStatus.AVAILABLE;
 
   public PetDomain pet() {
     return PetDomain.builder()
       .id(id)
       .name(name)
       .description(description)
-      .gender(gender)
-      .status(status)
+      .petGender(petGender)
+      .petStatus(petStatus)
       .build();
   }
 }

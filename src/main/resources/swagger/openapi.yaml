@@ -3,7 +3,7 @@ info:
   title: Pets API
   version: 0.0.1
 tags:
-  - name: pets
+  - name: pet
     description: Everything about your Pets
 servers:
   - url: http://localhost:8080
@@ -51,12 +51,12 @@ paths:
     get:
       tags:
         - pet
-      summary: Finds Pets by status
+      summary: Finds Pets by petStatus
       operationId: findPetsByStatus
       parameters:
-        - name: status
+        - name: petStatus
           in: query
-          description: "Status values that need to be considered for filter. Acceptable values: 'available', 'pending', 'sold'"
+          description: "PetStatus values that need to be considered for filter. Acceptable values: 'available', 'pending', 'sold'"
           required: false
           explode: true
           schema:
@@ -75,7 +75,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/PetResponse'
         '400':
-          description: Invalid status value
+          description: Invalid petStatus value
       x-inner-class: false
   /pets/{petId}:
     get:
@@ -101,7 +101,7 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: PetEntity not found
+          description: Pet not found
       x-inner-class: false
     delete:
       tags:
@@ -111,12 +111,16 @@ paths:
       parameters:
         - name: petId
           in: path
-          description: PetEntity id to delete
+          description: Pet id to delete
           required: true
           schema:
             type: string
             format: uuid
       responses:
+        '204':
+          description: Pet deleted successfully
+        '404':
+          description: Pet not found
         '400':
           description: Invalid pet value
       x-inner-class: false
@@ -128,7 +132,7 @@ paths:
       parameters:
         - name: petId
           in: path
-          description: PetEntity id to update
+          description: Pet id to update
           required: true
           schema:
             type: string
@@ -149,7 +153,7 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: PetEntity not found
+          description: Pet not found
       x-inner-class: false
   /pets/{petId}/photo:
     post:
@@ -211,6 +215,62 @@ paths:
         '404':
           description: Image not found
       x-inner-class: false
+  /pets/{petId}/users/adoption:
+    patch:
+      tags:
+        - pet
+      summary: Pet adoption by current adoptedBy
+      operationId: petAdoption
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: userId
+          in: query
+          description: ID of user to adopt
+          schema: 
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Pet deleted successfully
+        '404':
+          description: Pet not found
+        '400':
+          description: Invalid pet value
+      x-inner-class: false
+  
+  /pets/users/{userId}/adopted-pets:
+    get:
+      tags:
+        - pet
+      summary: Retrieve all pets adopted by a adoptedBy
+      operationId: findAdoptedPetsByUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the adoptedBy to list adopted pets
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfully retrieved the list of adopted pets
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PetResponse'
+        '404':
+          description: User not found
+        '400':
+          description: Invalid adoptedBy ID provided
+      x-inner-class: false
 
 components:
   schemas:
@@ -238,7 +298,7 @@ components:
             - MALE
         species:
           type: string
-          description: PetEntity specie
+          description: Pet specie
           enum:
             - CAT
             - DOG
@@ -251,7 +311,7 @@ components:
           type: string
           nullable: false
           example: Persa
-        ageMoths:
+        ageMonths:
           type: integer
           nullable: false
           description: Age in months
@@ -259,8 +319,8 @@ components:
       required:
         - name
         - description
-        - gender
-        - species
+        - petGender
+        - petSpecies
         - entryDate
         - breed
         - ageMoths
@@ -276,18 +336,25 @@ components:
           example: doggie
         status:
           type: string
-          description: PetEntity status in the store
+          description: PetEntity petStatus in the store
           enum:
             - AVAILABLE
             - PENDING
             - DONATED
         species:
           type: string
-          description: PetEntity specie
+          description: specie
           enum:
             - CAT
             - DOG
           example: CAT
+        gender:
+          type: string
+          description: gender
+          enum:
+            - FEMALE
+            - MALE
+          example: FEMALE
         description:
           type: string
           maxLength: 250
@@ -295,7 +362,7 @@ components:
           type: string
           nullable: false
           example: Persa
-        ageMoths:
+        ageMonths:
           type: integer
           description: Age in months
         entryDate:
@@ -321,7 +388,7 @@ components:
         petId:
           type: string
           format: uuid
-          description: ID of the PetEntity associated with the photo
+          description: ID of the Pet associated with the photo
         photoUrl:
           type: string
           description: Photo URL

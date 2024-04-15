@@ -2,12 +2,13 @@ package com.murilohenzo.petapi.adapters.inbound.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
+import com.murilohenzo.petapi.adapters.mapper.PetPhotoMapper;
 import com.murilohenzo.petapi.builders.PetDomainBuilder;
 import com.murilohenzo.petapi.builders.PetPhotoDomainBuilder;
 import com.murilohenzo.petapi.builders.PetRequestRepresentationBuilder;
 import com.murilohenzo.petapi.domain.models.PetDomain;
 import com.murilohenzo.petapi.domain.models.PetPhotoDomain;
-import com.murilohenzo.petapi.domain.models.enums.Status;
+import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import com.murilohenzo.petapi.domain.services.PetPhotoServicePortImpl;
 import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
 import com.murilohenzo.petapi.presentation.PetsApiController;
@@ -60,6 +61,9 @@ class PetsApiDelegateImplTest {
 
   @Mock
   private PetMapper petMapper;
+  
+  @Mock
+  private PetPhotoMapper petPhotoMapper;
 
   private MockMvc mvc;
 
@@ -81,7 +85,7 @@ class PetsApiDelegateImplTest {
     petPhoto = PetPhotoDomainBuilder.builder().build().petPhoto();
     
     petMapper = Mappers.getMapper(PetMapper.class);
-    petsApiDelegate = new PetsApiDelegateImpl(petService, petPhotoService, petMapper);
+    petsApiDelegate = new PetsApiDelegateImpl(petService, petPhotoService, petMapper, petPhotoMapper);
     petsApiController = new PetsApiController(petsApiDelegate);
 
     mvc = MockMvcBuilders.standaloneSetup(petsApiController)
@@ -151,10 +155,10 @@ class PetsApiDelegateImplTest {
 
   @Test
   void givenValidStatus_whenFindPetsByStatus_thenShouldReturnListOfPets() throws Exception {
-    when(petService.findPetsByStatus(Status.AVAILABLE)).thenReturn(List.of(pet));
+    when(petService.findPetsByStatus(PetStatus.AVAILABLE)).thenReturn(List.of(pet));
 
-    mvc.perform(get(PET_URL_PATH.concat("/").concat("findByStatus"))
-        .queryParam("status", Status.AVAILABLE.name())
+    mvc.perform(get(PET_URL_PATH.concat("/").concat("findByPetStatus"))
+        .queryParam("petStatus", PetStatus.AVAILABLE.name())
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
@@ -175,7 +179,7 @@ class PetsApiDelegateImplTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id", is(pet.getId().toString())))
-      .andExpect(jsonPath("$.status", is(pet.getStatus().name())));
+      .andExpect(jsonPath("$.petStatus", is(pet.getPetStatus().name())));
   }
 
   @Test
@@ -206,7 +210,7 @@ class PetsApiDelegateImplTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id", is(pet.getId().toString())))
-      .andExpect(jsonPath("$.status", is(pet.getStatus().name())));
+      .andExpect(jsonPath("$.petStatus", is(pet.getPetStatus().name())));
   }
 
   @Test

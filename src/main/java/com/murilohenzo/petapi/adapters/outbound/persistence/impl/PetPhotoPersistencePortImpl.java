@@ -1,6 +1,6 @@
 package com.murilohenzo.petapi.adapters.outbound.persistence.impl;
 
-import com.murilohenzo.petapi.adapters.mapper.PetMapper;
+import com.murilohenzo.petapi.adapters.mapper.PetPhotoMapper;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetPhotoJpaRepository;
 import com.murilohenzo.petapi.domain.models.PetPhotoDomain;
 import com.murilohenzo.petapi.domain.ports.PetPhotoPersistencePort;
@@ -13,16 +13,16 @@ import java.util.UUID;
 public class PetPhotoPersistencePortImpl implements PetPhotoPersistencePort {
 
   private final PetPhotoJpaRepository petPhotoRepository;
-  private final PetMapper petMapper;
+  private final PetPhotoMapper petPhotoMapper;
 
   @Override
   public PetPhotoDomain save(PetPhotoDomain photo) {
-    return petMapper.petPhotoEntityToPetPhotoDomain(this.petPhotoRepository.save(petMapper.petPhotoDomainToPetPhotoEntity(photo)));
+    return petPhotoMapper.petPhotoEntityToPetPhotoDomain(this.petPhotoRepository.save(petPhotoMapper.petPhotoDomainToPetPhotoEntity(photo)));
   }
 
   @Override
   public Optional<PetPhotoDomain> findPetPhotoByPetId(UUID id) {
-    return this.petPhotoRepository.findById(id).map(petMapper::petPhotoEntityToPetPhotoDomain);
+    return petPhotoRepository.findPhotoByPetId(id).map(petPhotoMapper::petPhotoEntityToPetPhotoDomain);
   }
 
 }
