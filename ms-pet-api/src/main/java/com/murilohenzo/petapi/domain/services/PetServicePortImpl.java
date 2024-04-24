@@ -1,9 +1,9 @@
 package com.murilohenzo.petapi.domain.services;
 
+import com.murilohenzo.petapi.config.Messages;
 import com.murilohenzo.petapi.domain.exceptions.EntityAlreadyExistsException;
 import com.murilohenzo.petapi.domain.exceptions.UserBlockedException;
 import com.murilohenzo.petapi.domain.models.PetDomain;
-import com.murilohenzo.petapi.domain.models.UserDomain;
 import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import com.murilohenzo.petapi.domain.models.enums.UserStatus;
 import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
@@ -46,7 +46,7 @@ public class PetServicePortImpl {
   public void delete(Long petId) {
     var existsPet = petPersistencePort.findById(petId);
     if (existsPet.isEmpty()) {
-      throw new EntityNotFoundException("Not found pet with id: " + petId);
+      throw new EntityNotFoundException(Messages.getString("PetHandler.03"));
     }
     petPersistencePort.deletePetById(petId);
   }
@@ -55,7 +55,7 @@ public class PetServicePortImpl {
   public PetDomain update(Long petId, PetDomain pet) {
     var existsPet = petPersistencePort.findById(petId);
     if (existsPet.isEmpty()) {
-      throw new EntityNotFoundException("Not found pet with id: " + petId);
+      throw new EntityNotFoundException(Messages.getString("PetHandler.03"));
     } else {
       existsPet.get().setName(pet.getName());
       existsPet.get().setDescription(pet.getDescription());
@@ -68,7 +68,7 @@ public class PetServicePortImpl {
   public List<PetDomain> findAllPetsByUser(Long userId) {
     var adoptUser = userPersistencePort.findById(userId);
     if (adoptUser.isEmpty()) {
-      throw new EntityNotFoundException("Not found adoptedBy with id: " + userId);
+      throw new EntityNotFoundException(Messages.getString("PetHandler.05"));
     } else {
       return petPersistencePort.findAllByUserId(adoptUser.get().getId());
     }
@@ -77,17 +77,17 @@ public class PetServicePortImpl {
   @Transactional
   public void adoptionPet(Long petId, Long userId) {
     var existPet = petPersistencePort.findById(petId)
-      .orElseThrow(() -> new EntityNotFoundException("Pet not found with id: " + petId));
+      .orElseThrow(() -> new EntityNotFoundException(Messages.getString("PetHandler.03")));
 
     var adoptUser = userPersistencePort.findById(userId)
-      .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+      .orElseThrow(() -> new EntityNotFoundException(Messages.getString("PetHandler.02")));
     
     if (existPet.getPetStatus().equals(PetStatus.DONATED)) {
-      throw new EntityAlreadyExistsException("Pet has already been adopted");
+      throw new EntityAlreadyExistsException(Messages.getString("PetHandler.01"));
     }
     
     if (adoptUser.getUserStatus().equals(UserStatus.BLOCKED)) {
-      throw new UserBlockedException("User is blocked");
+      throw new UserBlockedException(Messages.getString("PetHandler.04"));
     }
     
     existPet.setPetStatus(PetStatus.DONATED);
