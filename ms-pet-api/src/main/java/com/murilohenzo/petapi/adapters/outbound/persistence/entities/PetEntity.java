@@ -4,23 +4,21 @@ import com.murilohenzo.petapi.domain.models.enums.PetGender;
 import com.murilohenzo.petapi.domain.models.enums.PetSpecies;
 import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @Entity(name = "tb_pet")
-@ToString
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class PetEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
+  private Long id;
 
   @Column(nullable = false, length = 30)
   private String name;
@@ -67,6 +65,7 @@ public class PetEntity {
   }
 
   @ManyToOne(fetch = FetchType.LAZY)
-  private UserRefEntity user;
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
 
 }

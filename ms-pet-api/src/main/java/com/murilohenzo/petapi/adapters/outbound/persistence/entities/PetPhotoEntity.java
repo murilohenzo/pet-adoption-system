@@ -1,22 +1,20 @@
 package com.murilohenzo.petapi.adapters.outbound.persistence.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 @Entity(name = "tb_pet_photo")
-@ToString
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class PetPhotoEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
+  private Long id;
 
   @Column(nullable = false)
   private String name;

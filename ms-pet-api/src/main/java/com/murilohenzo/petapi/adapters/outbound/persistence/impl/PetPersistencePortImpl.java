@@ -1,6 +1,7 @@
 package com.murilohenzo.petapi.adapters.outbound.persistence.impl;
 
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
+import com.murilohenzo.petapi.adapters.mapper.UserMapper;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetJpaRepository;
 import com.murilohenzo.petapi.domain.models.PetDomain;
 import com.murilohenzo.petapi.domain.models.enums.PetStatus;
@@ -9,13 +10,13 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class PetPersistencePortImpl implements PetPersistencePort {
 
   private final PetJpaRepository repository;
   private final PetMapper petMapper;
+  private final UserMapper userMapper;
 
   @Override
   public PetDomain save(PetDomain pet) {
@@ -24,17 +25,28 @@ public class PetPersistencePortImpl implements PetPersistencePort {
   }
 
   @Override
+  public void saveUserPet(PetDomain petDomain) {
+    var user = petDomain.getUser();
+    if (user != null) {
+      var userEntity = userMapper.userRefDomainToUserRefEntity(user);
+      var petEntity = petMapper.petDomainToPetEntity(petDomain);
+      petEntity.setUser(userEntity);
+      repository.save(petEntity);
+    }
+  }
+
+  @Override
   public void update(PetDomain pet) {
     repository.save(petMapper.petDomainToPetEntity(pet));
   }
 
   @Override
-  public void delete(UUID id) {
-    repository.deleteById(id);
+  public void deletePetById(Long id) {
+    repository.deletePetById(id);
   }
 
   @Override
-  public Optional<PetDomain> findById(UUID petId) {
+  public Optional<PetDomain> findById(Long petId) {
     var petEntity = repository.findById(petId);
     return petEntity.map(petMapper::petEntityToPetDomain);
   }
@@ -50,12 +62,12 @@ public class PetPersistencePortImpl implements PetPersistencePort {
   }
 
   @Override
-  public void deletePetByUserId(UUID userID) {
+  public void deletePetByUserId(Long userID) {
     repository.deletePetByUserId(userID);
   }
 
   @Override
-  public List<PetDomain> findAllByUserId(UUID userID) {
+  public List<PetDomain> findAllByUserId(Long userID) {
     return repository.findAllByUser_Id(userID).stream().map(petMapper::petEntityToPetDomain).toList();
   }
 

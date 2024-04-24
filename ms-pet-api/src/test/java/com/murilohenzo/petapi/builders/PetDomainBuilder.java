@@ -11,7 +11,7 @@ import java.util.UUID;
 public class PetDomainBuilder {
 
   @Builder.Default
-  private UUID id = UUID.fromString("00000000-0000-0000-0000-000000000001");
+  private Long id = 1L;
 
   @Builder.Default
   private String name = "Sunshine";

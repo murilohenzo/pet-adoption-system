@@ -85,6 +85,7 @@ class PetsApiDelegateImplTest {
     petPhoto = PetPhotoDomainBuilder.builder().build().petPhoto();
     
     petMapper = Mappers.getMapper(PetMapper.class);
+    petPhotoMapper = Mappers.getMapper(PetPhotoMapper.class);
     petsApiDelegate = new PetsApiDelegateImpl(petService, petPhotoService, petMapper, petPhotoMapper);
     petsApiController = new PetsApiController(petsApiDelegate);
 
@@ -129,7 +130,7 @@ class PetsApiDelegateImplTest {
 
   @Test
   void givenExistingPetId_whenDeletePet_thenShouldReturnStatusNoContent() throws Exception {
-    var validId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var validId = 1L;
 
     doNothing().when(petService).delete(validId);
 
@@ -142,7 +143,7 @@ class PetsApiDelegateImplTest {
 
   @Test
   void givenNonExistingPetId_whenDeletePet_thenShouldThrowException() throws Exception {
-    var invalidId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var invalidId = 100L;
 
     doThrow(EntityNotFoundException.class).when(petService).delete(invalidId);
 
@@ -157,8 +158,8 @@ class PetsApiDelegateImplTest {
   void givenValidStatus_whenFindPetsByStatus_thenShouldReturnListOfPets() throws Exception {
     when(petService.findPetsByStatus(PetStatus.AVAILABLE)).thenReturn(List.of(pet));
 
-    mvc.perform(get(PET_URL_PATH.concat("/").concat("findByPetStatus"))
-        .queryParam("petStatus", PetStatus.AVAILABLE.name())
+    mvc.perform(get(PET_URL_PATH.concat("/").concat("findByStatus"))
+        .queryParam("status", PetStatus.AVAILABLE.toString())
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
@@ -169,7 +170,7 @@ class PetsApiDelegateImplTest {
 
   @Test
   void givenValidPetId_whenGetPetById_thenShouldReturnPet() throws Exception {
-    var validId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var validId = 1L;
 
     when(petService.findById(validId)).thenReturn(Optional.of(pet));
 
@@ -179,12 +180,12 @@ class PetsApiDelegateImplTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id", is(pet.getId().toString())))
-      .andExpect(jsonPath("$.petStatus", is(pet.getPetStatus().name())));
+      .andExpect(jsonPath("$.status", is(pet.getPetStatus().name())));
   }
 
   @Test
   void givenInvalidPetId_whenGetPetById_thenShouldReturnNotFound() throws Exception {
-    var invalidId = UUID.fromString("00000000-0000-0000-0000-000000000100");
+    var invalidId = 100L;
 
     when(petService.findById(invalidId)).thenReturn(Optional.empty());
 
@@ -197,7 +198,7 @@ class PetsApiDelegateImplTest {
 
   @Test
   void givenExistingPetIdAndValidPetRequest_whenUpdatePet_thenShouldReturnUpdatedPet() throws Exception {
-    var validId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var validId = 1L;
     var bodyAsObject = petMapper.petRequestRepresentationToPetDomain(petRequestRepresentation);
     var bodyAsJSON = objectMapper.writeValueAsString(petRequestRepresentation);
 
@@ -210,12 +211,12 @@ class PetsApiDelegateImplTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id", is(pet.getId().toString())))
-      .andExpect(jsonPath("$.petStatus", is(pet.getPetStatus().name())));
+      .andExpect(jsonPath("$.status", is(pet.getPetStatus().name())));
   }
 
   @Test
   void givenNonExistingPetIdAndValidPetRequest_whenUpdatePet_thenShouldThrowException() throws Exception {
-    var invalidId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var invalidId = 100L;
     var bodyAsObject = petMapper.petRequestRepresentationToPetDomain(petRequestRepresentation);
     var bodyAsJSON = objectMapper.writeValueAsString(petRequestRepresentation);
 
@@ -231,8 +232,7 @@ class PetsApiDelegateImplTest {
   
   @Test
   void givenExistingPetIdAndValidImage_whenUploadFile_thenShouldReturnStatusOkWithPhoto() throws Exception {
-    var validId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
-    var pet = petMapper.petRequestRepresentationToPetDomain(petRequestRepresentation);
+    var validId = 1L;
 
     Resource fileResource = new ClassPathResource("static/images/teste.jpg");
 

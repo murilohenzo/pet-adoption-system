@@ -54,7 +54,7 @@ paths:
       summary: Finds Pets by petStatus
       operationId: findPetsByStatus
       parameters:
-        - name: petStatus
+        - name: status
           in: query
           description: "PetStatus values that need to be considered for filter. Acceptable values: 'available', 'pending', 'sold'"
           required: false
@@ -89,8 +89,8 @@ paths:
           description: ID of pet to return
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       responses:
         '200':
           description: Successful operation
@@ -114,8 +114,8 @@ paths:
           description: Pet id to delete
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       responses:
         '204':
           description: Pet deleted successfully
@@ -135,8 +135,8 @@ paths:
           description: Pet id to update
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       requestBody:
         required: true
         content:
@@ -167,8 +167,8 @@ paths:
           description: ID of pet to update
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       requestBody:
         content:
           multipart/form-data:
@@ -202,8 +202,8 @@ paths:
           description: ID of pet
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       responses:
         '200':
           description: Successful operation
@@ -227,14 +227,15 @@ paths:
           description: ID of pet to update
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
         - name: userId
           in: query
           description: ID of user to adopt
-          schema: 
-            type: string
-            format: uuid
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '204':
           description: Pet deleted successfully
@@ -256,8 +257,8 @@ paths:
           description: ID of the adoptedBy to list adopted pets
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
       responses:
         '200':
           description: Successfully retrieved the list of adopted pets
@@ -329,8 +330,8 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         name:
           type: string
           example: doggie
@@ -382,12 +383,12 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: ID of the photo
         petId:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: ID of the Pet associated with the photo
         photoUrl:
           type: string

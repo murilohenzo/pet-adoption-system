@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class PetsApiDelegateImpl implements PetsApiDelegate {
@@ -34,7 +33,7 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Void> deletePet(UUID petId) {
+  public ResponseEntity<Void> deletePet(Long petId) {
     petService.delete(petId);
     return ResponseEntity.noContent().build();
   }
@@ -47,20 +46,20 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<PetResponseRepresentation> getPetById(UUID petId) {
+  public ResponseEntity<PetResponseRepresentation> getPetById(Long petId) {
     var pet = petService.findById(petId);
     return pet.map(value -> ResponseEntity.ok(petMapper.petDomainToPetResponseRepresentation(value)))
       .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
   }
 
   @Override
-  public ResponseEntity<PetResponseRepresentation> updatePet(UUID petId, PetRequestRepresentation petRequestRepresentation) {
+  public ResponseEntity<PetResponseRepresentation> updatePet(Long petId, PetRequestRepresentation petRequestRepresentation) {
     var pet = petService.update(petId, petMapper.petRequestRepresentationToPetDomain(petRequestRepresentation));
     return ResponseEntity.ok(petMapper.petDomainToPetResponseRepresentation(pet));
   }
 
   @Override
-  public ResponseEntity<PetPhotoResponseRepresentation> uploadFile(UUID petId, MultipartFile image) {
+  public ResponseEntity<PetPhotoResponseRepresentation> uploadFile(Long petId, MultipartFile image) {
     var pet = petService.findById(petId);
 
     if (pet.isEmpty()) {
@@ -73,7 +72,7 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Resource> downloadFile(UUID petId) {
+  public ResponseEntity<Resource> downloadFile(Long petId) {
     var photo = petPhotoService.getPhotoByPetId(petId);
     if (photo.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -91,7 +90,7 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<Void> petAdoption(UUID petId, UUID userId) {
+  public ResponseEntity<Void> petAdoption(Long petId, Long userId) {
     petService.adoptionPet(petId, userId);
     return ResponseEntity.noContent().build();
   }
@@ -102,7 +101,7 @@ public class PetsApiDelegateImpl implements PetsApiDelegate {
   }
 
   @Override
-  public ResponseEntity<List<PetResponseRepresentation>> findAdoptedPetsByUser(UUID userId) {
+  public ResponseEntity<List<PetResponseRepresentation>> findAdoptedPetsByUser(Long userId) {
     return ResponseEntity.ok(petService.findAllPetsByUser(userId).stream().map(petMapper::petDomainToPetResponseRepresentation).toList());
   }
 }

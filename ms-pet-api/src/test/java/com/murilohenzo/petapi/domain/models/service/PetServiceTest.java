@@ -57,7 +57,7 @@ class PetServiceTest {
   @Test
   void givenPetId_whenFindById_thenPetIsReturned() {
     // Given
-    var validId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+    var validId = 1L;
     var expectedPet = PetDomainBuilder.builder().build().pet();
     // When
     when(petRepository.findById(validId)).thenReturn(Optional.ofNullable(expectedPet));
@@ -72,21 +72,21 @@ class PetServiceTest {
   @Test
   void givenExistingPetId_whenDelete_thenPetIsDeleted() {
     // Given
-    var validId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var validId = 1L;
     var expectedPet = PetDomainBuilder.builder().build().pet();
     // When
     when(petRepository.findById(validId)).thenReturn(Optional.of(expectedPet));
-    doNothing().when(petRepository).delete(validId);
+    doNothing().when(petRepository).deletePetById(validId);
     petService.delete(validId);
     // Then
     verify(petRepository, times(1)).findById(validId);
-    verify(petRepository, times(1)).delete(validId);
+    verify(petRepository, times(1)).deletePetById(validId);
   }
 
   @Test
   void givenNonExistingPetId_whenDelete_thenThrowException() {
     // Given
-    var invalidId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var invalidId = 100L;
     // When
     when(petRepository.findById(invalidId)).thenReturn(Optional.empty());
     // Then
@@ -96,7 +96,7 @@ class PetServiceTest {
   @Test
   void givenExistingPetIdAndUpdatedPet_whenUpdate_thenPetIsUpdated() {
     // Given
-    var validId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var validId = 1L;
     var existPet = PetDomainBuilder.builder().build().pet();
     var expectedPet = PetDomainBuilder.builder().build().pet();
     expectedPet.setDescription("Gato laranja");
@@ -114,7 +114,7 @@ class PetServiceTest {
   @Test
   void givenNonExistingPetIdAndUpdatedPet_whenUpdate_thenThrowException() {
     // Given
-    var invalidId = UUID.fromString("57268206-e477-4da9-ad22-d92fd806448a");
+    var invalidId = 100L;
     var expectedPet = PetDomainBuilder.builder().build().pet();
     // When
     when(petRepository.findById(invalidId)).thenReturn(Optional.empty());

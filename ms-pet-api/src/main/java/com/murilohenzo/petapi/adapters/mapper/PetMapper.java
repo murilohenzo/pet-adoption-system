@@ -23,8 +23,10 @@ public interface PetMapper {
 
   public PetStatus toStatus(String status);
 
-  // PetDomain  
+  // PetDomain
+  @Mapping(source = "user", target = "user", ignore = true)
   public PetEntity petDomainToPetEntity(PetDomain petDomain);
-
+  
+  @Mapping(source = "user", target = "user", ignore = true)
   public PetDomain petEntityToPetDomain(PetEntity petEntity);
 }

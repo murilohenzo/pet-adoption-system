@@ -1,5 +1,7 @@
 package com.murilohenzo.petapi.adapters.inbound.rest;
 
+import com.murilohenzo.petapi.domain.exceptions.EntityAlreadyExistsException;
+import com.murilohenzo.petapi.domain.exceptions.UserBlockedException;
 import com.murilohenzo.petapi.presentation.representation.ProblemRepresentation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -86,4 +88,36 @@ public class ErrorHandlerAdvice {
     return ResponseEntity.status(status).body(problem);
   }
 
+  @ExceptionHandler(EntityAlreadyExistsException.class)
+  public ResponseEntity<ProblemRepresentation> entityAlreadyExistsException(EntityAlreadyExistsException e, HttpServletRequest request) {
+    var status = HttpStatus.CONFLICT;
+
+    log.debug("[D95] - EntityAlreadyExistsException:{}", e.getMessage());
+
+    ProblemRepresentation problem = new ProblemRepresentation();
+    problem.setMessage(e.getMessage());
+    problem.setStatusCode(status.value());
+    problem.setPath(request.getRequestURI());
+    problem.setTimestamp(Date.from(Instant.now()));
+    problem.setTitle("entity.already.exists");
+
+    return ResponseEntity.status(status).body(problem);
+  }
+
+  @ExceptionHandler(UserBlockedException.class)
+  public ResponseEntity<ProblemRepresentation> userBlockedException(UserBlockedException e, HttpServletRequest request) {
+    var status = HttpStatus.NOT_ACCEPTABLE;
+
+    log.debug("[D95] - UserBlockedException:{}", e.getMessage());
+
+    ProblemRepresentation problem = new ProblemRepresentation();
+    problem.setMessage(e.getMessage());
+    problem.setStatusCode(status.value());
+    problem.setPath(request.getRequestURI());
+    problem.setTimestamp(Date.from(Instant.now()));
+    problem.setTitle("user.blocked");
+
+    return ResponseEntity.status(status).body(problem);
+  }
+  
 }

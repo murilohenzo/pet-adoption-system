@@ -7,7 +7,6 @@ import com.murilohenzo.petapi.domain.ports.PetPhotoPersistencePort;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class PetPhotoPersistencePortImpl implements PetPhotoPersistencePort {
@@ -21,7 +20,7 @@ public class PetPhotoPersistencePortImpl implements PetPhotoPersistencePort {
   }
 
   @Override
-  public Optional<PetPhotoDomain> findPetPhotoByPetId(UUID id) {
+  public Optional<PetPhotoDomain> findPetPhotoByPetId(Long id) {
     return petPhotoRepository.findPhotoByPetId(id).map(petPhotoMapper::petPhotoEntityToPetPhotoDomain);
   }
 
