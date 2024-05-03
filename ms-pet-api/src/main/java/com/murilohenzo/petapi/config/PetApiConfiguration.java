@@ -7,7 +7,6 @@ import com.murilohenzo.petapi.adapters.mapper.UserMapper;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetJpaRepository;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetPhotoJpaRepository;
 import com.murilohenzo.petapi.adapters.outbound.persistence.UserRefJpaRepository;
-import com.murilohenzo.petapi.adapters.outbound.persistence.impl.LocalStoragePersistencePortImpl;
 import com.murilohenzo.petapi.adapters.outbound.persistence.impl.PetPersistencePortImpl;
 import com.murilohenzo.petapi.adapters.outbound.persistence.impl.PetPhotoPersistencePortImpl;
 import com.murilohenzo.petapi.adapters.outbound.persistence.impl.UserPersistencePortImpl;
@@ -17,11 +16,8 @@ import com.murilohenzo.petapi.domain.ports.StoragePersistencePort;
 import com.murilohenzo.petapi.domain.ports.UserPersistencePort;
 import com.murilohenzo.petapi.domain.services.PetPhotoServicePortImpl;
 import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
-import com.murilohenzo.petapi.utils.StorageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -75,13 +71,5 @@ public class PetApiConfiguration {
   @Bean
   public UserPersistencePortImpl userRefPersistencePort(UserRefJpaRepository userRefJpaRepository, UserMapper userMapper) {
     return new UserPersistencePortImpl(userRefJpaRepository, userMapper);
-  }
-
-  @Bean
-  @ConditionalOnProperty(name = "localstorage.enabled", havingValue = "true", matchIfMissing = false)
-  public LocalStoragePersistencePortImpl localStorageRepository(@Value("${localstorage.path}") String localStoragePath) {
-    log.info("[I63] - LOCALSTORAGE ENABLED DON'T USE IN PRODUCTION ENVIRONMENT");
-    var dir = StorageUtils.mkdir(localStoragePath);
-    return new LocalStoragePersistencePortImpl(dir);
   }
 }

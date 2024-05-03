@@ -33,9 +33,6 @@ public class PetPhotoEntity {
   @ToString.Exclude
   private PetEntity pet;
 
-  @Column(nullable = false)
-  private String photoUrl;
-
   @Column(name = "created_at", updatable = false)
   private Instant createdAt;
 

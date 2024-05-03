@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: des
   application: pet-api
   main:
     banner-mode: "off"

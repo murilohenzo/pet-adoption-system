@@ -109,7 +109,7 @@ class PetsApiDelegateImplTest {
         .content(bodyAsJSON))
       .andDo(print())
       .andExpect(status().isCreated())
-      .andExpect(jsonPath("$.id", is(pet.getId().toString())));
+      .andExpect(jsonPath("$.id", is(pet.getId().intValue())));
   }
 
   @Test
@@ -179,7 +179,7 @@ class PetsApiDelegateImplTest {
         .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.id", is(pet.getId().toString())))
+      .andExpect(jsonPath("$.id", is(pet.getId().intValue())))
       .andExpect(jsonPath("$.status", is(pet.getPetStatus().name())));
   }
 
@@ -210,7 +210,7 @@ class PetsApiDelegateImplTest {
         .content(bodyAsJSON))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.id", is(pet.getId().toString())))
+      .andExpect(jsonPath("$.id", is(pet.getId().intValue())))
       .andExpect(jsonPath("$.status", is(pet.getPetStatus().name())));
   }
 
@@ -250,7 +250,7 @@ class PetsApiDelegateImplTest {
         .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.id", is(petPhoto.getId().toString())))
+      .andExpect(jsonPath("$.id", is(pet.getId().intValue())))
       .andExpect(jsonPath("$.contentType", is(petPhoto.getContentType())));
   }
 
