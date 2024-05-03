@@ -10,7 +10,7 @@ import software.amazon.awssdk.regions.Region;
 @Setter
 public class S3ClientConfigurationProperties {
 
-  private Region region = Region.US_EAST_1;
+  private Region region = Region.US_WEST_2;
   private String accessKeyId;
   private String secretAccessKey;
   private String bucket;

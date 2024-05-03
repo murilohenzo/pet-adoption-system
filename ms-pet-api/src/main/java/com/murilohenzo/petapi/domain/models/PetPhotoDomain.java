@@ -16,7 +16,6 @@ public class PetPhotoDomain {
   private String storageReferenceKey;
   @ToString.Exclude
   private PetDomain pet;
-  private String photoUrl;
   private Instant createdAt;
   private Instant updatedAt;
 }

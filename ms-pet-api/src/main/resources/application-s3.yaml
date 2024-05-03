@@ -1,5 +1,6 @@
 aws:
   s3:
+    enabled: true
     accessKeyId: ${ACCESS_KEY_ID}
     secretAccessKey: ${SECRET_ACCESS_KEY}
     bucket: ${BUCKET}

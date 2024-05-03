@@ -39,3 +39,7 @@ docker/*.jar
 /localstorage
 localstorage/*.png
 localstorage/*jpg
+
+.env
+
+/.env

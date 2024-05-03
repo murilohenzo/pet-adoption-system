@@ -36,7 +36,6 @@ public class PetPhotoServicePortImpl {
     var petPhoto = PetPhotoDomain.builder()
       .pet(pet)
       .size(file.getSize())
-      .photoUrl("aws-s3")
       .name(file.getName())
       .storageReferenceKey(referenceId)
       .contentType(file.getContentType())

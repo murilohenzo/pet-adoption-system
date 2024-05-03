@@ -390,9 +390,6 @@ components:
           type: integer
           format: int64
           description: ID of the Pet associated with the photo
-        photoUrl:
-          type: string
-          description: Photo URL
         name:
           type: string
           description: Image name
