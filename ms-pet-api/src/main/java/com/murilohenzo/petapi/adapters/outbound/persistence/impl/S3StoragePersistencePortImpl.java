@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -50,8 +51,13 @@ public class S3StoragePersistencePortImpl implements StoragePersistencePort {
   }
 
   @Override
-  public boolean deleteImage(String imgReferenceId) {
-    return false;
+  public void deleteImage(String referenceKey) {
+    DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+      .key(referenceKey)
+      .bucket(s3Properties.getBucket())
+      .build();
+    
+    s3Client.deleteObject(deleteObjectRequest);
   }
   
   private String generateId() {

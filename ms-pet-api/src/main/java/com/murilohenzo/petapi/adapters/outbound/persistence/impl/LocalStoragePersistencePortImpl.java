@@ -18,14 +18,14 @@ public class LocalStoragePersistencePortImpl implements StoragePersistencePort {
   @SneakyThrows
   public String saveImage(String fileName, InputStream is) {
 
-    String imgReferenceId = UUID.randomUUID().toString().concat(fileName);
+    String referenceKey = UUID.randomUUID().toString().concat(fileName);
     Path uploadPath = Path.of(uploadDirectory);
-    Path filePath = uploadPath.resolve(imgReferenceId);
+    Path filePath = uploadPath.resolve(referenceKey);
     if (!Files.exists(uploadPath)) {
       Files.createDirectories(uploadPath);
     }
     Files.copy(is, filePath, StandardCopyOption.REPLACE_EXISTING);
-    return imgReferenceId;
+    return referenceKey;
   }
 
   @SneakyThrows
@@ -39,13 +39,10 @@ public class LocalStoragePersistencePortImpl implements StoragePersistencePort {
   }
 
   @SneakyThrows
-  public boolean deleteImage(String imgReferenceId) {
+  public void deleteImage(String imgReferenceId) {
     Path imagePath = Path.of(uploadDirectory, imgReferenceId);
     if (Files.exists(imagePath)) {
       Files.delete(imagePath);
-      return true;
-    } else {
-      return false;
     }
   }
 } 
