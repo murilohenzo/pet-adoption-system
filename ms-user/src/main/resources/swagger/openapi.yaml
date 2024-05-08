@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: CRUD de Usuários
+  description: API para realizar operações CRUD em usuários.
+  version: 1.0.0
+
+paths:
+  /users:
+    get:
+      summary: Listar todos os usuários
+      responses:
+        '200':
+          description: Lista de usuários recuperada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Criar um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuário criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{userId}:
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: ID do usuário a ser manipulado.
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Obter detalhes de um usuário específico
+      responses:
+        '200':
+          description: Detalhes do usuário recuperados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Atualizar um usuário existente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuário atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: Excluir um usuário existente
+      responses:
+        '204':
+          description: Usuário excluído com sucesso.
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 50
+        password:
+          type: string
+          maxLength: 255
+        fullName:
+          type: string
+          maxLength: 150
+        userStatus:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+        userType:
+          type: string
+          enum: [ADMIN, STANDARD]
+        phoneNumber:
+          type: string
+          maxLength: 20
+        cpf:
+          type: string
+          maxLength: 20
+        imageUrl:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        lastUpdateDate:
+          type: string
+          format: date-time
+      required:
+        - username
+        - email
+        - password
+        - fullName
+        - userStatus
+        - userType
+        - creationDate
+        - lastUpdateDate

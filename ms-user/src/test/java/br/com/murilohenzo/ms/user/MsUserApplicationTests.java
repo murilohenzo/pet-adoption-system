@@ -1,4 +1,4 @@
-package br.com.murilohenzo.msuser;
+package br.com.murilohenzo.ms.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
