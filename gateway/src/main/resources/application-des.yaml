@@ -1,0 +1,71 @@
+spring:
+  config:
+    activate:
+      on-profile: des
+  application: gateway
+  main:
+    banner-mode: "off"
+    allow-bean-definition-overriding: true
+  beaninfo:
+    ignore: true
+  cloud:
+    gateway:
+      routes:
+        - id: teste
+          uri: http://httpbin.org
+          predicates:
+            - Path=/get
+          filters:
+            - TokenRelay=
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_CLIENT_ID}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          keycloak:
+            authorization-uri: ${KEYCLOAK_URI}/protocol/openid-connect/auth
+            token-uri: ${KEYCLOAK_URI}/protocol/openid-connect/token
+            user-info-uri: ${KEYCLOAK_URI}/protocol/openid-connect/userinfo
+            jwk-set-uri: ${KEYCLOAK_URI}/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URI}
+          jwk-set-uri: ${KEYCLOAK_URI}/protocol/openid-connect/certs
+
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+  error:
+    whitelabel:
+      enabled: false
+    include-stacktrace: never
+management:
+  server:
+    port: 9090
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus, mappings
+
+gateway:
+  resource:
+    client:
+      jwtUrl: ${KEYCLOAK_URI}/protocol/openid-connect/token
+      client-id: ${KEYCLOAK_CLIENT_ID}
+      client-secret: ${KEYCLOAK_CLIENT_SECRET}
+      grantType: password
+      scope: "profile email"

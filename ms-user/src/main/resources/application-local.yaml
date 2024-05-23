@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        ddl-auto: true
+        format-sql: false
+        dialect: org.hibernate.dialect.H2Dialect
+
+security:
+  auth:
+    disable: true

@@ -32,7 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### Docker ###
+./idea
+./docker/*.jar
 docker/*.jar
-
-.env
