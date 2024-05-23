@@ -1,0 +1,147 @@
+version: '3.9'
+
+services:
+  traefik:
+    image: traefik:v2.5
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--metrics.prometheus=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--metrics.prometheus.entrypoint=web"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik
+
+  prometheus:
+    image: prom/prometheus:v2.30.3
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    # labels:
+    #   - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)"
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    networks:
+      - traefik
+
+  grafana:
+    image: grafana/grafana:8.3.0
+    container_name: grafana
+    ports:
+      - "3000:8080"
+    labels:
+      - "traefik.http.routers.grafana.rule=Host(`grafana.localhost`)"
+    networks:
+      - traefik
+
+  postgres:
+    image: postgres:13.2
+    restart: unless-stopped
+    container_name: postgres_keycloak_db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    networks:
+      - traefik
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U keycloak"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+
+  mysql:
+    image: mysql:8-debian
+    restart: unless-stopped
+    container_name: mysql_users_db
+    environment:
+      MYSQL_DATABASE: users_store
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+    networks:
+      - traefik
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+
+  keycloak:
+    depends_on:
+      - postgres
+      - mysql
+      # postgres:
+      #   condition: service_healthy
+      # mysql:
+      #   condition: service_healthy
+    container_name: keycloak_local
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      PROXY_ADDRESS_FORWARDING: "true"
+    image: quay.io/keycloak/keycloak:24.0.0
+    volumes:
+      - ./custom-storage-provider/docker/custom-storage-provider.jar:/opt/keycloak/providers/provider.jar
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+    command:
+      - start-dev
+    networks:
+      - traefik
+    labels:
+      - "traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+
+  # SUBIR GATEWAY POR ULTIMO
+
+  gateway:
+    depends_on:
+      - keycloak
+    container_name: gateway_service
+    restart: unless-stopped
+    build:
+      context: ../gateway/docker
+      dockerfile: Dockerfile
+    networks:
+      - traefik
+    ports:
+      - "8085:8080"
+    labels:
+      - "traefik.http.routers.gateway.rule=Host(`gateway.localhost`)"
+      - "traefik.http.services.gateway.loadbalancer.server.port=8080"
+    environment:
+      KEYCLOAK_CLIENT_ID: gateway-auth-des
+      KEYCLOAK_CLIENT_SECRET: XS6Re9GiZ3D0NEy5Yg1dMxfjYD4yb6n9
+      KEYCLOAK_URI: http://keycloak:8080/realms/myrealm
+
+networks:
+  traefik:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mysql_data:

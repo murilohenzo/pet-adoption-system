@@ -1,0 +1,71 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  application: gateway
+  main:
+    banner-mode: "off"
+    allow-bean-definition-overriding: true
+  beaninfo:
+    ignore: true
+  cloud:
+    gateway:
+      routes:
+        - id: teste
+          uri: http://httpbin.org
+          predicates:
+            - Path=/get
+          filters:
+            - TokenRelay=
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: gateway-auth-des
+            client-secret: XS6Re9GiZ3D0NEy5Yg1dMxfjYD4yb6n9
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          keycloak:
+            authorization-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/auth
+            token-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/token
+            user-info-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/myrealm
+          jwk-set-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/certs
+
+server:
+  port: 8085
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+  error:
+    whitelabel:
+      enabled: false
+    include-stacktrace: never
+management:
+  server:
+    port: 9095
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus, mappings
+
+gateway:
+  resource:
+    client:
+      jwtUrl: http://localhost:8081/realms/myrealm/protocol/openid-connect/token
+      client-id: gateway-auth-des
+      client-secret: XS6Re9GiZ3D0NEy5Yg1dMxfjYD4yb6n9
+      grantType: password
+      scope: "profile email"
