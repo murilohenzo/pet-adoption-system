@@ -1,53 +1,31 @@
 version: '3.9'
 
 services:
-  traefik:
-    image: traefik:v2.5
-    container_name: traefik
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
-      - "--metrics.prometheus=true"
-      - "--entrypoints.websecure.address=:443"
-      - "--metrics.prometheus.entrypoint=web"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    networks:
-      - traefik
+  # traefik:
+  #   image: traefik:v2.5
+  #   container_name: traefik
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--entrypoints.web.address=:80"
+  #     - "--metrics.prometheus=true"
+  #     - "--entrypoints.websecure.address=:443"
+  #     - "--entrypoints.rabbitmq.address=:15672"
+  #     - "--metrics.prometheus.entrypoint=web"
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     - "8080:8080"
+  #     - "15672:15672"
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #   networks:
+  #     - traefik
 
-  prometheus:
-    image: prom/prometheus:v2.30.3
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    # labels:
-    #   - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)"
-    volumes:
-      - ./prometheus:/etc/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-    networks:
-      - traefik
-
-  grafana:
-    image: grafana/grafana:8.3.0
-    container_name: grafana
-    ports:
-      - "3000:8080"
-    labels:
-      - "traefik.http.routers.grafana.rule=Host(`grafana.localhost`)"
-    networks:
-      - traefik
-
-  postgres:
+  keycloak_db:
     image: postgres:13.2
     restart: unless-stopped
-    container_name: postgres_keycloak_db
+    container_name: keycloak_db
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
@@ -58,16 +36,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready -U keycloak"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
 
-  mysql:
+  users_db:
     image: mysql:8-debian
     restart: unless-stopped
-    container_name: mysql_users_db
+    container_name: users_db
     environment:
       MYSQL_DATABASE: users_store
       MYSQL_USER: admin
@@ -78,25 +51,32 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-    # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
+      - mysql_data:/var/lib/mysql_users
+
+  pets_db:
+    image: mysql:8-debian
+    restart: unless-stopped
+    container_name: tasks_db
+    environment:
+      MYSQL_DATABASE: pets_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+    networks:
+      - traefik
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql_pets
 
   keycloak:
     depends_on:
-      - postgres
-      - mysql
-      # postgres:
-      #   condition: service_healthy
-      # mysql:
-      #   condition: service_healthy
+      - keycloak_db
+      - users_db
     container_name: keycloak_local
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres/keycloak
+      KC_DB_URL: jdbc:postgresql://keycloak_db/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: keycloak
       KEYCLOAK_ADMIN: admin
@@ -106,21 +86,74 @@ services:
     volumes:
       - ./custom-storage-provider/docker/custom-storage-provider.jar:/opt/keycloak/providers/provider.jar
     ports:
-      - "8081:8080"
+      - "8080:8080"
     restart: unless-stopped
     command:
       - start-dev
     networks:
       - traefik
-    labels:
-      - "traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+    # labels:
+    #   - "traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)"
+    #   - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
 
-  # SUBIR GATEWAY POR ULTIMO
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    # labels:
+    #   - "traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.localhost`)"
+    #   - "traefik.http.services.mq.loadbalancer.server.port=15672"
+    #   - "traefik.http.routers.mq.entrypoints=websecure"
+    networks:
+      - traefik
+
+  users_service:
+    depends_on:
+    - users_db
+    - rabbitmq
+    - keycloak
+    container_name: users_service
+    restart: unless-stopped
+    build:
+      context: ../ms-user/docker
+      dockerfile: Dockerfile
+    networks:
+      traefik:
+        ipv4_address: 172.18.0.20
+    ports:
+      - "8080:8080"
+    # labels:
+    #   - "traefik.http.routers.users_service.rule=Host(`users_service.localhost`)"
+    #   - "traefik.http.services.users_service.loadbalancer.server.port=8080"
+
+  pets_service:
+    depends_on:
+    - pets_db
+    - rabbitmq
+    container_name: pets_service
+    restart: unless-stopped
+    build:
+      context: ../ms-pet-api/docker
+      dockerfile: Dockerfile
+    networks:
+      traefik:
+        ipv4_address: 172.18.0.21
+    ports:
+      - "8080:8080"
+    # labels:
+    #   - "traefik.http.routers.tasks_service.rule=Host(`tasks_service.localhost`)"
+    #   - "traefik.http.services.tasks_service.loadbalancer.server.port=8080"
+
+
+# SUBIR GATEWAY POR ULTIMO
 
   gateway:
     depends_on:
       - keycloak
+      - users_service
+      - pets_service
     container_name: gateway_service
     restart: unless-stopped
     build:
@@ -129,19 +162,49 @@ services:
     networks:
       - traefik
     ports:
-      - "8085:8080"
-    labels:
-      - "traefik.http.routers.gateway.rule=Host(`gateway.localhost`)"
-      - "traefik.http.services.gateway.loadbalancer.server.port=8080"
+      - "8085:8085"
+    # labels:
+    #   - "traefik.http.routers.gateway.rule=Host(`gateway.localhost`)"
+    #   - "traefik.http.services.gateway.loadbalancer.server.port=8080"
     environment:
       KEYCLOAK_CLIENT_ID: gateway-auth-des
-      KEYCLOAK_CLIENT_SECRET: XS6Re9GiZ3D0NEy5Yg1dMxfjYD4yb6n9
+      KEYCLOAK_CLIENT_SECRET: RfxkVHghvhwOivuZauPwut4mzKPLLJn1
       KEYCLOAK_URI: http://keycloak:8080/realms/myrealm
 
 networks:
   traefik:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16  # Sub-rede personalizada
 
 volumes:
   postgres_data:
   mysql_data:
+
+
+  # prometheus:
+  #   image: prom/prometheus:v2.30.3
+  #   container_name: prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   # labels:
+  #   #   - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)"
+  #   volumes:
+  #     - ./prometheus:/etc/prometheus
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  #   networks:
+  #     - traefik
+
+  # grafana:
+  #   image: grafana/grafana:8.3.0
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:8080"
+  #   labels:
+  #     - "traefik.http.routers.grafana.rule=Host(`grafana.localhost`)"
+  #     - "traefik.http.services.grafana.loadbalancer.server.port=8080"
+  #   networks:
+  #     - traefik

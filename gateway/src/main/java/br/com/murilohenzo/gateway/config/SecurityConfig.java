@@ -32,8 +32,8 @@ public class SecurityConfig {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
-    private static final List<String> NO_CSRF = List.of("/login", "/novoUsuario");
-    private static final List<String> PUBLIC_ENDPOINTS = List.of("/login");
+    private static final List<String> NO_CSRF = List.of("/user/**","/user/login", "/user/signup", "/pets", "/pets/**");
+    private static final List<String> PUBLIC_ENDPOINTS = List.of("/user/login", "/user/signup");
 
     @NotNull
     @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")

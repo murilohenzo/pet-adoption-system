@@ -8,18 +8,18 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import br.com.murilohenzo.gateway.config.AuthProperties;
+import br.com.murilohenzo.gateway.config.SecurityProperties;
 import br.com.murilohenzo.gateway.domain.entities.Credentials;
 import br.com.murilohenzo.gateway.domain.entities.TokenRepresentation;
 import reactor.core.publisher.Mono;
 
 @Service
-@EnableConfigurationProperties(AuthProperties.class)
+@EnableConfigurationProperties(SecurityProperties.class)
 public class AuthenticationService {
 
-    private final AuthProperties properties;
+    private final SecurityProperties properties;
 
-    public AuthenticationService(AuthProperties properties) {
+    public AuthenticationService(SecurityProperties properties) {
         this.properties = properties;
     }
 

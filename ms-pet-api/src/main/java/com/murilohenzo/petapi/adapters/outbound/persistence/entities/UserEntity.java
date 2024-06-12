@@ -31,7 +31,7 @@ public class UserEntity {
   private Instant updatedAt;
   
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-  private Set<PetEntity> pets;
+    private Set<PetEntity> pets;
 
   @PrePersist
   public void prePersist() {

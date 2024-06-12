@@ -60,7 +60,7 @@ public class CustomUserStorageProvider implements
     public UserModel getUserByUsername(RealmModel realm, String username) {
         log.info("BUSCAR USUARIO PELO NOME DO USUARIO - ({})",username);
         try ( Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where username = ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email from users where username = ?");
             st.setString(1, username);
             st.execute();
             ResultSet rs = st.getResultSet();
@@ -80,7 +80,7 @@ public class CustomUserStorageProvider implements
     public UserModel getUserByEmail(RealmModel realm, String email) {
         log.info("BUSCAR USARIO PELO EMAIL - ({})",email);
         try ( Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where email = ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email from users where email = ?");
             st.setString(1, email);
             st.execute();
             ResultSet rs = st.getResultSet();
@@ -157,7 +157,7 @@ public class CustomUserStorageProvider implements
         log.info("[I113] getUsers: realm={}", realm.getName());
 
         try ( Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users order by username limit ? offset ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email from users order by username limit ? offset ?");
             st.setInt(1, maxResults);
             st.setInt(2, firstResult);
             st.execute();
@@ -177,7 +177,7 @@ public class CustomUserStorageProvider implements
     public Stream<UserModel> searchForUserStream(RealmModel realm, String search, Integer firstResult, Integer maxResults) {
         log.info("BUSCANDO USUARIO: realm={}", realm.getName());
         try (Connection c = DbUtil.getConnection(this.model)) {
-            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email, birthDate from users where username like ? order by username limit ? offset ?");
+            PreparedStatement st = c.prepareStatement("select username, firstName,lastName, email from users where username like ? order by username limit ? offset ?");
             st.setString(1, search);
             st.setInt(2, maxResults);
             st.setInt(3, firstResult);
@@ -208,7 +208,7 @@ public class CustomUserStorageProvider implements
                 .email(rs.getString("email"))
                 .firstName(rs.getString("firstName"))
                 .lastName(rs.getString("lastName"))
-                .birthDate(rs.getDate("birthDate"))
+                // .birthDate(rs.getDate("birthDate"))
                 .build();
 
         return user;

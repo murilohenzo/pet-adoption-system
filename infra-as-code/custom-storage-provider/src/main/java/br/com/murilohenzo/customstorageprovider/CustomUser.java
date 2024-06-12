@@ -21,7 +21,7 @@ public class CustomUser extends AbstractUserAdapterFederatedStorage {
     private String email;
     private String firstName;
     private String lastName;
-    private Date birthDate;
+    // private Date birthDate;
 
     public CustomUser(
             KeycloakSession session,
@@ -30,19 +30,20 @@ public class CustomUser extends AbstractUserAdapterFederatedStorage {
             String username,
             String email,
             String firstName,
-            String lastName,
-            Date birthDate) {
+            String lastName
+            // Date birthDate
+            ) {
         super(session, realm, storageProviderModel);
         this.username = username;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
+        // this.birthDate = birthDate;
 
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
-        setBirthDate(birthDate);
+        // setBirthDate(birthDate);
     }
 
     @Override
@@ -89,18 +90,18 @@ public class CustomUser extends AbstractUserAdapterFederatedStorage {
         setSingleAttribute(UserModel.EMAIL, email);
     }
 
-    public Date getBirthDate() {
-        String birthDateString = getFirstAttribute("birthDate");
-        if (birthDateString != null) {
-            return new Date(Long.parseLong(birthDateString));
-        }
-        return birthDate;
-    }
+    // public Date getBirthDate() {
+    //     String birthDateString = getFirstAttribute("birthDate");
+    //     if (birthDateString != null) {
+    //         return new Date(Long.parseLong(birthDateString));
+    //     }
+    //     return birthDate;
+    // }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-        setSingleAttribute("birthDate", String.valueOf(birthDate.getTime()));
-    }
+    // public void setBirthDate(Date birthDate) {
+    //     this.birthDate = birthDate;
+    //     setSingleAttribute("birthDate", String.valueOf(birthDate.getTime()));
+    // }
 
     private String getAttributeOrDefault(String attributeName, String defaultValue) {
         String attributeValue = getFirstAttribute(attributeName);
@@ -114,7 +115,7 @@ public class CustomUser extends AbstractUserAdapterFederatedStorage {
         attributes.put(UserModel.EMAIL, List.of(getEmail()));
         attributes.put(UserModel.FIRST_NAME, List.of(getFirstName()));
         attributes.put(UserModel.LAST_NAME, List.of(getLastName()));
-        attributes.put("birthDate", List.of(String.valueOf(getBirthDate().getTime())));
+        // attributes.put("birthDate", List.of(String.valueOf(getBirthDate().getTime())));
         return attributes;
     }
 
@@ -156,7 +157,7 @@ public class CustomUser extends AbstractUserAdapterFederatedStorage {
         }
 
         public CustomUser build() {
-            return new CustomUser(session, realm, storageProviderModel, username, email, firstName, lastName, birthDate);
+            return new CustomUser(session, realm, storageProviderModel, username, email, firstName, lastName);
         }
     }
 }

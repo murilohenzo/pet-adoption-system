@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ./idea
-./docker/*.jar
-docker/*.jar
+# ./docker/*.jar
+# docker/*.jar

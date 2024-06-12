@@ -9,14 +9,19 @@ spring:
   beaninfo:
     ignore: true
   cloud:
+    discovery:
+      enabled: true
     gateway:
       routes:
-        - id: teste
-          uri: http://httpbin.org
+        - id: users_service
+          uri: http://172.18.0.20:3003/
           predicates:
-            - Path=/get
-          filters:
-            - TokenRelay=
+            - Path= /user/**
+        - id: tasks_service
+          uri: http://172.18.0.21:3005/
+          predicates:
+            - Path= /tasks/**
+
   security:
     oauth2:
       client:
@@ -40,7 +45,7 @@ spring:
           jwk-set-uri: ${KEYCLOAK_URI}/protocol/openid-connect/certs
 
 server:
-  port: 8080
+  port: 8085
   servlet:
     session:
       cookie:
@@ -52,7 +57,7 @@ server:
     include-stacktrace: never
 management:
   server:
-    port: 9090
+    port: 9095
   endpoint:
     health:
       show-details: always
@@ -69,3 +74,9 @@ gateway:
       client-secret: ${KEYCLOAK_CLIENT_SECRET}
       grantType: password
       scope: "profile email"
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web: DEBUG
+    reactor.netty: DEBUG
