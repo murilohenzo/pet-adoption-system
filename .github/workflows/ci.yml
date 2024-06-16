@@ -37,6 +37,7 @@ jobs:
           if [[ "$current_branch" != "master" && "$current_branch" != "main" && ! "$current_branch" =~ ^(f/|feature/|hotfix/) ]]; then
             echo "Error: Invalid branch name. Branch names must start with 'f/', 'feature/', or 'hotfix/'."
             exit 1
+          fi
 
       - name: Build
         run: mvn clean install -DskipTests
