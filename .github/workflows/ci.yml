@@ -38,7 +38,6 @@ jobs:
             echo "Error: Invalid branch name. Branch names must start with 'f/', 'feature/', or 'hotfix/'."
             exit 1
           fi
-        shell: bash
 
       - name: Build
         run: mvn clean install -DskipTests
