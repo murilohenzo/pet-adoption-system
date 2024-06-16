@@ -32,7 +32,6 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -13,16 +14,17 @@ import java.util.Set;
 public class UserEntity {
   
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Column(length = 20, unique = true)
-  private String cpf;
-  
-  @Column(name = "user_status", nullable=false)
-  private String userStatus;
-  
-  @Column(name = "user_type", nullable=false)
-  private String userType;
+  @Column(name = "username", nullable = false, unique = true)
+  private String username;
+
+  @Column(name = "email", nullable = false, unique = true)
+  private String email;
+
+  @Column(name = "referenceId", unique = true)
+  private String referenceId = UUID.randomUUID().toString();
   
   @Column(name = "created_at", updatable = false)
   private Instant createdAt;

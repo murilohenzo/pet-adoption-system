@@ -67,13 +67,18 @@ management:
         include: info, health, metrics, prometheus, mappings
 
 gateway:
-  resource:
-    client:
-      jwtUrl: ${KEYCLOAK_URI}/protocol/openid-connect/token
-      client-id: ${KEYCLOAK_CLIENT_ID}
-      client-secret: ${KEYCLOAK_CLIENT_SECRET}
-      grantType: password
-      scope: "profile email"
+  resource-client:
+    jwtUrl: ${KEYCLOAK_URI}/protocol/openid-connect/token
+    client-id: ${KEYCLOAK_CLIENT_ID}
+    client-secret: ${KEYCLOAK_CLIENT_SECRET}
+    grantType: password
+    scope: "profile email"
+  noCsrfEndpoints:
+    - "/user/**"
+    - "/pets/**"
+  publicEndpoints:
+    - "/user/login"
+    - "/user/signup"
 
 logging:
   level:

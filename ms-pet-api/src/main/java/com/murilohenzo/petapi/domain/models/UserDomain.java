@@ -10,9 +10,9 @@ import java.util.Set;
 @Builder
 public class UserDomain {
   private Long id;
-  private String cpf;
-  private String userStatus;
-  private String userType;
+  private String username;
+  private String email;
+  private String referenceId;
   private Instant createdAt;
   private Instant updatedAt;
   private Set<PetDomain> pets;

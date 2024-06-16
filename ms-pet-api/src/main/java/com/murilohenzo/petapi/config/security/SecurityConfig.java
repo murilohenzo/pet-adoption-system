@@ -1,4 +1,4 @@
-package br.com.murilohenzo.ms.user.config;
+package com.murilohenzo.petapi.config.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
