@@ -4,6 +4,13 @@ info:
   description: API para realizar operações CRUD em usuários.
   version: 1.0.0
 
+tags:
+  - name: user
+    description: Everything about your Users
+servers:
+  - url: http://localhost:8080
+    description: Localhost server
+
 paths:
   /users:
     get:
@@ -16,7 +23,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/UserResponse'
     post:
       summary: Criar um novo usuário
       requestBody:
@@ -24,14 +31,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         '201':
           description: Usuário criado com sucesso.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserResponse'
 
   /users/{userId}:
     parameters:
@@ -40,8 +47,8 @@ paths:
         required: true
         description: ID do usuário a ser manipulado.
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
     get:
       summary: Obter detalhes de um usuário específico
       responses:
@@ -50,7 +57,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserResponse'
     put:
       summary: Atualizar um usuário existente
       requestBody:
@@ -58,14 +65,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         '200':
           description: Usuário atualizado com sucesso.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserResponse'
     delete:
       summary: Excluir um usuário existente
       responses:
@@ -74,12 +81,9 @@ paths:
 
 components:
   schemas:
-    User:
+    UserRequest:
       type: object
       properties:
-        userId:
-          type: string
-          format: uuid
         username:
           type: string
           maxLength: 50
@@ -90,35 +94,46 @@ components:
         password:
           type: string
           maxLength: 255
-        fullName:
+        firstName:
           type: string
           maxLength: 150
-        userStatus:
+        lastName:
           type: string
-          enum: [ACTIVE, INACTIVE]
-        userType:
-          type: string
-          enum: [ADMIN, STANDARD]
+          maxLength: 150
         phoneNumber:
           type: string
           maxLength: 20
-        cpf:
-          type: string
-          maxLength: 20
-        imageUrl:
-          type: string
-        creationDate:
-          type: string
-          format: date-time
-        lastUpdateDate:
-          type: string
-          format: date-time
       required:
         - username
         - email
         - password
-        - fullName
-        - userStatus
-        - userType
-        - creationDate
-        - lastUpdateDate
+        - firstName
+        - lastName
+        - phoneNumber
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: string
+        referenceId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+

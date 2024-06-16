@@ -17,27 +17,39 @@ spring:
             - Path=/get
           filters:
             - TokenRelay=
+        - id: users
+          uri: http://localhost:3003
+          predicates:
+            - Path=/user/**
+          filters:
+            - TokenRelay=
+        - id: tasks
+          uri: http://localhost:3005
+          predicates:
+            - Path=/tasks/**
+          filters:
+            - TokenRelay=
   security:
     oauth2:
       client:
         registration:
           keycloak:
             client-id: gateway-auth-des
-            client-secret: XS6Re9GiZ3D0NEy5Yg1dMxfjYD4yb6n9
+            client-secret: RfxkVHghvhwOivuZauPwut4mzKPLLJn1
             scope: openid,profile,email
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           keycloak:
-            authorization-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/auth
-            token-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/token
-            user-info-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/userinfo
-            jwk-set-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/certs
+            authorization-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/auth
+            token-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/token
+            user-info-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
             user-name-attribute: preferred_username
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/myrealm
-          jwk-set-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/myrealm
+          jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
 
 server:
   port: 8085
@@ -64,8 +76,8 @@ management:
 gateway:
   resource:
     client:
-      jwtUrl: http://localhost:8081/realms/myrealm/protocol/openid-connect/token
+      jwtUrl: http://localhost:8080/realms/myrealm/protocol/openid-connect/token
       client-id: gateway-auth-des
-      client-secret: XS6Re9GiZ3D0NEy5Yg1dMxfjYD4yb6n9
+      client-secret: RfxkVHghvhwOivuZauPwut4mzKPLLJn1
       grantType: password
       scope: "profile email"

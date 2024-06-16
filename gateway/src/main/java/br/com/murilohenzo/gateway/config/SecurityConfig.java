@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -28,16 +29,20 @@ import jakarta.validation.constraints.NotNull;
 
 @Configuration
 @EnableWebFluxSecurity
+@EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityConfig {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
-    private static final List<String> NO_CSRF = List.of("/login", "/novoUsuario");
-    private static final List<String> PUBLIC_ENDPOINTS = List.of("/login");
-
     @NotNull
     @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
     private String jwkSetUri;
+
+    private SecurityProperties securityProperties;
+
+    public SecurityConfig(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
 
     @Bean
     public SecurityWebFilterChain securityFilter(ServerHttpSecurity httpSecurity,
@@ -85,18 +90,18 @@ public class SecurityConfig {
     @Bean
     PublicEndpoints publicRequestMatcherSupplier() {
 
-        if (PUBLIC_ENDPOINTS.isEmpty()) {
+        if (this.securityProperties.getPublicEndpoints().isEmpty()) {
             return Collections::emptyList;
         }
 
-        return () -> PUBLIC_ENDPOINTS.stream()
+        return () -> this.securityProperties.getPublicEndpoints().stream()
                 .map(ServerWebExchangeMatchers::pathMatchers)
                 .toList();
     }
 
     @Bean
     NoCsrfEndpoints noCsrfRequestMatcherSupplier() {
-        return () -> NO_CSRF.stream()
+        return () -> this.securityProperties.getNoCsrfEndpoints().stream()
                 .map(ServerWebExchangeMatchers::pathMatchers)
                 .toList();
     }

@@ -2,10 +2,8 @@ package com.murilohenzo.petapi.domain.services;
 
 import com.murilohenzo.petapi.config.Messages;
 import com.murilohenzo.petapi.domain.exceptions.EntityAlreadyExistsException;
-import com.murilohenzo.petapi.domain.exceptions.UserBlockedException;
 import com.murilohenzo.petapi.domain.models.PetDomain;
 import com.murilohenzo.petapi.domain.models.enums.PetStatus;
-import com.murilohenzo.petapi.domain.models.enums.UserStatus;
 import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
 import com.murilohenzo.petapi.domain.ports.UserPersistencePort;
 import jakarta.persistence.EntityNotFoundException;
@@ -68,7 +66,7 @@ public class PetServicePortImpl {
   public List<PetDomain> findAllPetsByUser(Long userId) {
     var adoptUser = userPersistencePort.findById(userId);
     if (adoptUser.isEmpty()) {
-      throw new EntityNotFoundException(Messages.getString("PetHandler.05"));
+      throw new EntityNotFoundException(Messages.getString("PetHandler.04"));
     } else {
       return petPersistencePort.findAllByUserId(adoptUser.get().getId());
     }
@@ -84,10 +82,6 @@ public class PetServicePortImpl {
     
     if (existPet.getPetStatus().equals(PetStatus.DONATED)) {
       throw new EntityAlreadyExistsException(Messages.getString("PetHandler.01"));
-    }
-    
-    if (adoptUser.getUserStatus().equals(UserStatus.BLOCKED)) {
-      throw new UserBlockedException(Messages.getString("PetHandler.04"));
     }
     
     existPet.setPetStatus(PetStatus.DONATED);
