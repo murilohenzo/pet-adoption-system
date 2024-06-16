@@ -9,9 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    #    environment:
-    #      name: ci
-    #      url: https://github.com
+    strategy:
+      matrix:
+        project:
+          - gateway
+          - ms-notification
+          - ms-pet-api
+          - ms-user
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 21
