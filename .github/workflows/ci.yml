@@ -19,7 +19,7 @@ jobs:
           - ms-user
     defaults:
       run:
-        working-directory: pet-adoption-system/${{ matrix.project }}
+        working-directory: ${{ matrix.project }}
     steps:
       - uses: actions/checkout@v3
 
@@ -30,15 +30,15 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-#      - name: Validate Branch
-#        run: |
-#          current_branch=$(echo "${GITHUB_REF#refs/heads/}")
-#          echo $current_branch
-#          if [[ "$current_branch" != "master" && "$current_branch" != "main" && ! "$current_branch" =~ ^(f/|feature/|hotfix/) ]]; then
-#            echo "Error: Invalid branch name. Branch names must start with 'f/', 'feature/', or 'hotfix/'."
-#            exit 1
-#          fi
-#        shell: bash
+      - name: Validate Branch
+        run: |
+          current_branch=$(echo "${GITHUB_REF#refs/heads/}")
+          echo $current_branch
+          if [[ "$current_branch" != "master" && "$current_branch" != "main" && ! "$current_branch" =~ ^(f/|feature/|hotfix/) ]]; then
+            echo "Error: Invalid branch name. Branch names must start with 'f/', 'feature/', or 'hotfix/'."
+            exit 1
+          fi
+        shell: bash
 
       - name: Build
         run: mvn clean install -DskipTests
