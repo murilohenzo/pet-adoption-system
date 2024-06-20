@@ -43,6 +43,29 @@ jobs:
       - name: Build
         run: mvn clean install -DskipTests
 
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        project:
+          - gateway
+          - ms-notification
+          - ms-pet-api
+          - ms-user
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: maven
+
       - name: Unit Tests
         run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
 
@@ -54,6 +77,22 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.organization=${{ vars.SONAR_ORG_KEY }} \
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    strategy:
+      matrix:
+        project:
+          - gateway
+          - ms-notification
+          - ms-pet-api
+          - ms-user
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
