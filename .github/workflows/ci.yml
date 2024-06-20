@@ -15,7 +15,7 @@ jobs:
         project:
           - gateway
           - ms-notification
-          - ms-pet-api
+#          - ms-pet-api
           - ms-user
     defaults:
       run:
@@ -51,7 +51,7 @@ jobs:
         project:
           - gateway
           - ms-notification
-          - ms-pet-api
+#          - ms-pet-api
           - ms-user
     defaults:
       run:
@@ -87,7 +87,7 @@ jobs:
         project:
           - gateway
           - ms-notification
-          - ms-pet-api
+#          - ms-pet-api
           - ms-user
     defaults:
       run:
