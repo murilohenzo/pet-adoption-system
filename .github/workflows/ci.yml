@@ -42,6 +42,7 @@ jobs:
 
       - name: Build
         run: mvn clean install -DskipTests
+
   unit-tests:
     runs-on: ubuntu-latest
     needs: build
@@ -75,7 +76,8 @@ jobs:
           mvn verify sonar:sonar \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.organization=${{ vars.SONAR_ORG_KEY }} \
-            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }} \
+            -Dsonar.projectName=${{ matrix.project }}
 
   docker-build:
     runs-on: ubuntu-latest
