@@ -1,4 +1,5 @@
-name: ci-java-workflow
+name: Workflow Java - SpringBoot
+run-name: Build ${{ github.run_number }}
 
 on:
   push:
@@ -6,7 +7,12 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [ "master", "main" ]
-
+  workflow_dispatch:
+    inputs:
+      conc:
+        type: string
+        default: pipeline
+concurrency: ${{ inputs.conc }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +21,7 @@ jobs:
         project:
           - gateway
           - ms-notification
-#          - ms-pet-api
+          - ms-pet-api
           - ms-user
     defaults:
       run:
@@ -51,7 +57,7 @@ jobs:
         project:
           - gateway
           - ms-notification
-#          - ms-pet-api
+          - ms-pet-api
           - ms-user
     defaults:
       run:
@@ -87,7 +93,7 @@ jobs:
         project:
           - gateway
           - ms-notification
-#          - ms-pet-api
+          - ms-pet-api
           - ms-user
     defaults:
       run:
