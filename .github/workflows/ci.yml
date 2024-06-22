@@ -9,10 +9,10 @@ on:
     branches: [ "master", "main" ]
   workflow_dispatch:
     inputs:
-      conc:
+      chave:
         type: string
         default: pipeline
-concurrency: ${{ inputs.conc }}
+concurrency: ${{ inputs.chave }}
 jobs:
   build:
     runs-on: ubuntu-latest
