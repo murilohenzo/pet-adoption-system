@@ -1,7 +1,6 @@
 name: Monorepo Java Workflow
 run-name: Build ${{ github.run_number }}
 
-
 on:
   push:
     branches: [ "master", "main", "feature/*", "f/*", "hotfix/*" ]
@@ -15,7 +14,7 @@ env:
 concurrency: pipeline
 jobs:
   gateway:
-    uses: ${{ env.WORKFLOW_PATH }}
+    uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: gateway
 
