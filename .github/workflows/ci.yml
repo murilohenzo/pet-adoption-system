@@ -1,4 +1,4 @@
-name: Workflow Java - SpringBoot
+name: Monorepo Java Workflow
 run-name: Build ${{ github.run_number }}
 
 on:
@@ -7,111 +7,28 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [ "master", "main" ]
-#  workflow_dispatch:
-#    inputs:
-#      chave:
-#        type: string
-#        default: pipeline
+
+env:
+  WORKFLOW_PATH: 'murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main'
+
 concurrency: pipeline
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project:
-          - gateway
-          - ms-notification
-          - ms-pet-api
-          - ms-user
-    defaults:
-      run:
-        working-directory: ${{ matrix.project }}
-    steps:
-      - uses: actions/checkout@v3
+  gateway:
+    uses: ${{ env.WORKFLOW_PATH }}
+    with:
+      project: gateway
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-          cache: maven
+  ms-notification:
+    uses: ${{ env.WORKFLOW_PATH }}
+    with:
+      project: ms-notification
 
-      - name: Validate Branch
-        run: |
-          current_branch=$(echo "${GITHUB_REF#refs/heads/}")
-          echo $current_branch
-          if [[ "$current_branch" != "master" && "$current_branch" != "main" && ! "$current_branch" =~ ^(f/|feature/|hotfix/) ]]; then
-            echo "Error: Invalid branch name. Branch names must start with 'f/', 'feature/', or 'hotfix/'."
-            exit 1
-          fi
-        shell: bash
+  ms-pet-api:
+    uses: ${{ env.WORKFLOW_PATH }}
+    with:
+      project: ms-pet-api
 
-      - name: Build
-        run: mvn clean install -DskipTests
-
-  unit-tests:
-    runs-on: ubuntu-latest
-    needs: build
-    strategy:
-      matrix:
-        project:
-          - gateway
-          - ms-notification
-          - ms-pet-api
-          - ms-user
-    defaults:
-      run:
-        working-directory: ${{ matrix.project }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-          cache: maven
-
-      - name: Unit Tests
-        run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.11:prepare-agent test org.apache.maven.plugins:maven-surefire-report-plugin:3.2.5:report org.jacoco:jacoco-maven-plugin:0.8.11:report
-
-      - name: Code Analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn verify sonar:sonar \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.organization=${{ vars.SONAR_ORG_KEY }} \
-            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }} \
-            -Dsonar.projectName=${{ matrix.project }}
-
-  docker-build:
-    runs-on: ubuntu-latest
-    needs: unit-tests
-    strategy:
-      matrix:
-        project:
-          - gateway
-          - ms-notification
-          - ms-pet-api
-          - ms-user
-    defaults:
-      run:
-        working-directory: ${{ matrix.project }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker images
-        run: |
-          image_name="${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.project }}"
-          docker build -f docker/Dockerfile -t $image_name:latest .
-          docker push $image_name:latest
+  ms-user:
+    uses: ${{ env.WORKFLOW_PATH }}
+    with:
+      project: ms-user
