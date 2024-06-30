@@ -8,9 +8,6 @@ on:
     types: [opened, synchronize, reopened]
     branches: [ "master", "main" ]
 
-env:
-  WORKFLOW_PATH: 'murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main'
-
 concurrency: pipeline
 jobs:
   gateway:
@@ -19,16 +16,16 @@ jobs:
       project: gateway
 
   ms-notification:
-    uses: ${{ env.WORKFLOW_PATH }}
+    uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: ms-notification
 
   ms-pet-api:
-    uses: ${{ env.WORKFLOW_PATH }}
+    uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: ms-pet-api
 
   ms-user:
-    uses: ${{ env.WORKFLOW_PATH }}
+    uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: ms-user
