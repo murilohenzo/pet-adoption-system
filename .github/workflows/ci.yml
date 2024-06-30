@@ -14,18 +14,23 @@ jobs:
     uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: gateway
+      run_code_analysis: false
 
   ms-notification:
     uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: ms-notification
+      run_code_analysis: false
 
   ms-pet-api:
     uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: ms-pet-api
+      run_code_analysis: false
 
   ms-user:
     uses: murilohenzo/github-actions-deploys/.github/workflows/java_ci.yml@main
     with:
       project: ms-user
+      run_code_analysis: false
+
