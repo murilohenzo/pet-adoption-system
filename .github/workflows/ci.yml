@@ -1,6 +1,7 @@
 name: Monorepo Java Workflow
 run-name: Build ${{ github.run_number }}
 
+
 on:
   push:
     branches: [ "master", "main", "feature/*", "f/*", "hotfix/*" ]
