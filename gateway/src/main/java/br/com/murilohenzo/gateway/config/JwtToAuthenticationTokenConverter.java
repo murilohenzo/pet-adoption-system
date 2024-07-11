@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 
 public class JwtToAuthenticationTokenConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
 
-
     private final static Logger log = LoggerFactory.getLogger(JwtToAuthenticationTokenConverter.class);
 
     private static final String RESOURCE_ACCESS_CLAIM = "realm_access";

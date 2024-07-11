@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
-@Entity(name = "tb_user")
+@Entity(name = "users")
 @NoArgsConstructor
 public class User {
 

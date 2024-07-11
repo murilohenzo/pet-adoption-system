@@ -12,11 +12,15 @@ import java.util.stream.Stream;
 
 import org.keycloak.component.ComponentModel;
 import org.keycloak.credential.*;
+import org.keycloak.credential.hash.PasswordHashProvider;
+import org.keycloak.credential.hash.PasswordHashSpi;
 import org.keycloak.models.GroupModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.credential.PasswordCredentialModel;
+import org.keycloak.models.credential.PasswordUserCredentialModel;
+import org.keycloak.models.credential.dto.PasswordCredentialData;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.user.UserLookupProvider;
@@ -37,7 +41,6 @@ public class CustomUserStorageProvider implements
 
     private KeycloakSession ksession;
     private ComponentModel model;
-
 
     public CustomUserStorageProvider(KeycloakSession ksession, ComponentModel model) {
         this.ksession = ksession;
@@ -111,11 +114,13 @@ public class CustomUserStorageProvider implements
     @Override
     public boolean isValid(RealmModel realm, UserModel user, CredentialInput credentialInput) {
         log.info("CREDENCIAIS VALIDAS (realm={},user={},credentialInput.type={})",realm.getName(), user.getUsername(), credentialInput.getType());
-        if( !this.supportsCredentialType(credentialInput.getType())) {
+        if(!this.supportsCredentialType(credentialInput.getType())) {
             return false;
         }
+
         StorageId sid = new StorageId(user.getId());
         String username = sid.getExternalId();
+        String rawPassword = credentialInput.getChallengeResponse();
 
         try ( Connection c = DbUtil.getConnection(this.model)) {
             PreparedStatement st = c.prepareStatement("select password from users where username = ?");
@@ -123,8 +128,8 @@ public class CustomUserStorageProvider implements
             st.execute();
             ResultSet rs = st.getResultSet();
             if ( rs.next()) {
-                String pwd = rs.getString(1);
-                return pwd.equals(credentialInput.getChallengeResponse());
+                String storedHash = rs.getString(1);
+                return  PasswordUtils.verifyPassword(storedHash, rawPassword);
             }
             else {
                 return false;
