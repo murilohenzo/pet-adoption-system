@@ -18,15 +18,15 @@ spring:
           filters:
             - TokenRelay=
         - id: users
-          uri: http://localhost:3003
+          uri: http://localhost:3000
           predicates:
-            - Path=/user/**
+            - Path=/users/**
           filters:
             - TokenRelay=
-        - id: tasks
+        - id: pets
           uri: http://localhost:3005
           predicates:
-            - Path=/tasks/**
+            - Path=/pets/**
           filters:
             - TokenRelay=
   security:
@@ -74,10 +74,16 @@ management:
         include: info, health, metrics, prometheus, mappings
 
 gateway:
-  resource:
-    client:
+  resourceClient:
       jwtUrl: http://localhost:8080/realms/myrealm/protocol/openid-connect/token
       client-id: gateway-auth-des
-      client-secret: RfxkVHghvhwOivuZauPwut4mzKPLLJn1
+      client-secret: 716LgIBZeNVR5WJ3vx5Sg4pcLbxI1tKl
       grantType: password
       scope: "profile email"
+  noCsrfEndpoints:
+    - /login
+    - /users/**
+    - /pets/**
+  publicEndpoints:
+    - /login
+    - /users

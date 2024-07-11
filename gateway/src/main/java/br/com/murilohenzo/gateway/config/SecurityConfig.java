@@ -35,10 +35,10 @@ public class SecurityConfig {
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     @NotNull
-    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri:#{null}}")
     private String jwkSetUri;
 
-    private SecurityProperties securityProperties;
+    private final SecurityProperties securityProperties;
 
     public SecurityConfig(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
@@ -49,7 +49,7 @@ public class SecurityConfig {
                                                  ObjectProvider<PublicEndpoints> publicEndpoints,
                                                  ObjectProvider<NoCsrfEndpoints> noCsrfEndpoints,
                                                  JwtToAuthenticationTokenConverter converter) {
-        log.info("[I38] - SEGURANCA JWT ATIVADO");
+        log.info("[I52] - SEGURANCA JWT ATIVADO");
 
         return httpSecurity
                 .authorizeExchange(auth -> auth
@@ -101,6 +101,11 @@ public class SecurityConfig {
 
     @Bean
     NoCsrfEndpoints noCsrfRequestMatcherSupplier() {
+
+        if (this.securityProperties.getNoCsrfEndpoints().isEmpty()) {
+            return Collections::emptyList;
+        }
+
         return () -> this.securityProperties.getNoCsrfEndpoints().stream()
                 .map(ServerWebExchangeMatchers::pathMatchers)
                 .toList();
