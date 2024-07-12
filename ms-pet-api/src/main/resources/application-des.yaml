@@ -27,7 +27,7 @@ spring:
           issuer-uri: ${KEYCLOAK_URI}
           jwk-set-uri: ${KEYCLOAK_URI}/protocol/openid-connect/certs
 server:
-  port: 8080
+  port: 3005
   servlet:
     session:
       cookie:
@@ -39,7 +39,7 @@ server:
     include-stacktrace: never
 management:
   server:
-    port: 9090
+    port: 9096
   endpoint:
     health:
       show-details: always
@@ -47,3 +47,17 @@ management:
     web:
       exposure:
         include: info, health, metrics, prometheus, mappings
+        
+security:
+  auth:
+    disable: false
+  public-endpoints:
+    - '/public'
+    - "/swagger-ui.html"
+    - "/v3/api-docs/**"
+    - "/swagger-ui/**"
+    - "/v2/api-docs/**"
+    - "/swagger-resources/**"
+    - "/actuator/health"
+  roles:
+    ADMIN: [ "ADMIN_PETS" ]

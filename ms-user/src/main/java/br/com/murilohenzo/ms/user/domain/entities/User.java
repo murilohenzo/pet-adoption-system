@@ -3,6 +3,11 @@ package br.com.murilohenzo.ms.user.domain.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -10,10 +15,11 @@ import java.util.UUID;
 @Data
 @Entity(name = "users")
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -37,19 +43,19 @@ public class User {
     @Column(name = "referenceId", unique = true)
     private String referenceId = UUID.randomUUID().toString();
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "createdAt", columnDefinition = "TIMESTAMP")
+    @CreatedDate
     private Instant createdAt;
 
-    @Column(name = "updated_at", updatable = true)
+    @Column(name = "updatedAt", columnDefinition = "TIMESTAMP")
+    @LastModifiedDate
     private Instant updatedAt;
 
-    @PrePersist
-    public void prePersist() {
-        createdAt = Instant.now();
-    }
+    @Column(name = "createdBy")
+    @CreatedBy
+    private String createdBy;
 
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = Instant.now();
-    }
+    @Column(name = "modifiedBy")
+    @LastModifiedBy
+    private String modifiedBy;
 }

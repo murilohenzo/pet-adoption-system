@@ -35,7 +35,7 @@ spring:
         registration:
           keycloak:
             client-id: gateway-auth-des
-            client-secret: RfxkVHghvhwOivuZauPwut4mzKPLLJn1
+            client-secret: EHaorlxJsnsfI4fvwoJDJART5pvOectD
             scope: openid,profile,email
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
@@ -52,7 +52,7 @@ spring:
           jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
 
 server:
-  port: 8085
+  port: 8081
   servlet:
     session:
       cookie:
@@ -64,7 +64,7 @@ server:
     include-stacktrace: never
 management:
   server:
-    port: 9095
+    port: 9090
   endpoint:
     health:
       show-details: always
@@ -77,13 +77,15 @@ gateway:
   resourceClient:
       jwtUrl: http://localhost:8080/realms/myrealm/protocol/openid-connect/token
       client-id: gateway-auth-des
-      client-secret: 716LgIBZeNVR5WJ3vx5Sg4pcLbxI1tKl
+      client-secret: EHaorlxJsnsfI4fvwoJDJART5pvOectD
       grantType: password
       scope: "profile email"
   noCsrfEndpoints:
-    - /login
-    - /users/**
-    - /pets/**
+    - "/login"
+    - "/users/**"
+    - "/pets/**"
   publicEndpoints:
-    - /login
-    - /users
+    - "/login"
+    - "/users"
+    - "/actuator/health"
+

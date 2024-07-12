@@ -42,7 +42,7 @@ server:
     include-stacktrace: never
 management:
   server:
-    port: 9090
+    port: 9095
   endpoint:
     health:
       show-details: always
@@ -61,8 +61,6 @@ security:
     - "/swagger-ui/**"
     - "/v2/api-docs/**"
     - "/swagger-resources/**"
+    - "/actuator/health"
   roles:
     ADMIN: [ "ADMIN_PETS" ]
-  jwtUrl: ${KEYCLOAK_URI}/protocol/openid-connect/token
-  clientId: gateway-auth-des
-  clientSecret: 716LgIBZeNVR5WJ3vx5Sg4pcLbxI1tKl

@@ -7,6 +7,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -14,10 +19,11 @@ import java.time.LocalDate;
 @Data
 @Entity(name = "tb_pet")
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class PetEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false, length = 30)
@@ -48,24 +54,23 @@ public class PetEntity {
   @Column(nullable = false)
   private LocalDate entryDate;
 
-  @Column(name = "created_at", updatable = false)
+  @Column(name = "createdAt", columnDefinition = "TIMESTAMP")
+  @CreatedDate
   private Instant createdAt;
 
-  @Column(name = "updated_at")
+  @Column(name = "updatedAt", columnDefinition = "TIMESTAMP")
+  @LastModifiedDate
   private Instant updatedAt;
 
-  @PrePersist
-  public void prePersist() {
-    createdAt = Instant.now();
-  }
+  @Column(name = "createdBy")
+  @CreatedBy
+  private String createdBy;
 
-  @PreUpdate
-  public void preUpdate() {
-    updatedAt = Instant.now();
-  }
+  @Column(name = "modifiedBy")
+  @LastModifiedBy
+  private String modifiedBy;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private UserEntity user;
-
 }

@@ -56,7 +56,7 @@ services:
   pets_db:
     image: mysql:8-debian
     restart: unless-stopped
-    container_name: tasks_db
+    container_name: pets_db
     environment:
       MYSQL_DATABASE: pets_db
       MYSQL_USER: admin

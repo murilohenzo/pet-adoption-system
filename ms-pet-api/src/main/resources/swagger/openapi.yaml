@@ -11,6 +11,8 @@ servers:
 paths:
   /pets:
     post:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Add a new pet to the store
@@ -32,6 +34,8 @@ paths:
           description: Invalid input
       x-inner-class: false
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Find all pets
@@ -49,6 +53,8 @@ paths:
       x-inner-class: false
   /pets/findByStatus:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Finds Pets by petStatus
@@ -79,6 +85,8 @@ paths:
       x-inner-class: false
   /pets/{petId}:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Find pet by ID
@@ -104,6 +112,8 @@ paths:
           description: Pet not found
       x-inner-class: false
     delete:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Deletes a pet
@@ -125,6 +135,8 @@ paths:
           description: Invalid pet value
       x-inner-class: false
     put:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Update an existing pet
@@ -157,6 +169,8 @@ paths:
       x-inner-class: false
   /pets/{petId}/photo:
     post:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Upload image
@@ -192,6 +206,8 @@ paths:
           description: Invalid request payload
       x-inner-class: false
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Download image
@@ -217,6 +233,8 @@ paths:
       x-inner-class: false
   /pets/{petId}/users/adoption:
     patch:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Pet adoption by current adoptedBy
@@ -247,6 +265,8 @@ paths:
   
   /pets/users/{userId}/adopted-pets:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - pet
       summary: Retrieve all pets adopted by a adoptedBy
@@ -426,3 +446,8 @@ components:
           type: string
           format: date-time
       title: Problem
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

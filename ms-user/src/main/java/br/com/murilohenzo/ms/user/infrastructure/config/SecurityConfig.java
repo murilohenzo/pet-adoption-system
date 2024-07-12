@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,6 +27,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -32,12 +35,13 @@ import java.util.function.Supplier;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @RequiredArgsConstructor
 @EnableConfigurationProperties(SecurityProperties.class)
+@EnableJpaAuditing(auditorAwareRef="auditorProvider")
 public class SecurityConfig {
 
     private final SecurityProperties properties;
 
     @NotNull
-    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri:#{null}}")
     private String jwkSetUri;
 
     /**
@@ -50,7 +54,7 @@ public class SecurityConfig {
     @Bean
     @ConditionalOnProperty(name = "security.auth.disable", havingValue = "true", matchIfMissing = false)
     public SecurityFilterChain testSecurityFilter(HttpSecurity httpSecurity) throws Exception {
-        log.info("[I25] - SEGURANCA JWT DESATIVADA, NAO USAR ESSA CONFIGURACAO EM AMBIENTE PRODUTIVO");
+        log.info("[I57] - SEGURANCA JWT DESATIVADA, NAO USAR ESSA CONFIGURACAO EM AMBIENTE PRODUTIVO");
 
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
@@ -70,7 +74,7 @@ public class SecurityConfig {
     @Bean
     @ConditionalOnProperty(name = "security.auth.disable", havingValue = "false", matchIfMissing = true)
     public SecurityFilterChain securityFilter(HttpSecurity httpSecurity, JwtToAuthenticationTokenConverter converter, ObjectProvider<PublicEndpoints> supplierObjectProvider) throws Exception {
-        log.info("[I38] - SEGURANCA JWT ATIVADO");
+        log.info("[I77] - SEGURANCA JWT ATIVADO");
 
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
@@ -92,7 +96,7 @@ public class SecurityConfig {
      */
     @Bean
     JwtDecoder jwtDecoder() {
-        log.info("[I83] - ATIVANDO INSPENCAO DE TOKEN");
+        log.info("[I99] - ATIVANDO INSPENCAO DE TOKEN");
         return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
 
@@ -113,10 +117,10 @@ public class SecurityConfig {
      */
     @Bean
     PublicEndpoints publicRequestMatcherSupplier() {
-        log.info("[I107] - ENDPOINTS PUBLICOS - {}", properties.getPublicEndpoints());
+        log.info("[I120] - ENDPOINTS PUBLICOS - {}", properties.getPublicEndpoints());
         var eps = properties.getPublicEndpoints();
         if (eps.isEmpty()) {
-            log.info("[I97] - ENDPOINTS PUBLICOS NAO MAPEADOS");
+            log.info("[I123] - ENDPOINTS PUBLICOS NAO MAPEADOS");
             return Collections::emptyList;
         }
 
@@ -140,17 +144,30 @@ public class SecurityConfig {
     }
 
     /**
-     * Fornece um fornecedor para o contexto de autenticação atual.
+     * Fornece o usuario do contexto de autenticação atual.
      *
-     * @return um fornecedor para a autenticação atual
+     * @return o usuario do contexto atual
      */
     @Bean
     @RequestScope
     Supplier<Authentication> authenticationSupplier() {
         return () -> {
             var auth = SecurityContextHolder.getContext().getAuthentication();
-            log.info("[I142] AuthenticationSupplier - auth={}", auth);
+            log.info("[I156] AuthenticationSupplier - auth={}", auth);
             return auth;
+        };
+    }
+
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+        var supplier = authenticationSupplier();
+        return () -> {
+            var auth = supplier.get();
+            if (auth == null) {
+                return Optional.of("UNKNOWN");
+            } else {
+                return Optional.of(auth.getName());
+            }
         };
     }
 

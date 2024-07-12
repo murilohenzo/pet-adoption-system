@@ -4,16 +4,22 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Data
 @Entity(name = "tb_pet_photo")
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class PetPhotoEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
@@ -33,20 +39,19 @@ public class PetPhotoEntity {
   @ToString.Exclude
   private PetEntity pet;
 
-  @Column(name = "created_at", updatable = false)
+  @Column(name = "createdAt", columnDefinition = "TIMESTAMP")
+  @CreatedDate
   private Instant createdAt;
 
-  @Column(name = "updated_at", updatable = true)
+  @Column(name = "updatedAt", columnDefinition = "TIMESTAMP")
+  @LastModifiedDate
   private Instant updatedAt;
 
-  @PrePersist
-  public void prePersist() {
-    createdAt = Instant.now();
-  }
+  @Column(name = "createdBy")
+  @CreatedBy
+  private String createdBy;
 
-  @PreUpdate
-  public void preUpdate() {
-    updatedAt = Instant.now();
-  }
-  
+  @Column(name = "modifiedBy")
+  @LastModifiedBy
+  private String modifiedBy;
 }

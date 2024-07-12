@@ -3,6 +3,8 @@ package com.murilohenzo.petapi.adapters.outbound.persistence.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.UUID;
 public class UserEntity {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(name = "username", nullable = false, unique = true)
@@ -26,23 +28,14 @@ public class UserEntity {
   @Column(name = "referenceId", unique = true)
   private String referenceId = UUID.randomUUID().toString();
   
-  @Column(name = "created_at", updatable = false)
-  private Instant createdAt;
-
-  @Column(name = "updated_at", updatable = true)
-  private Instant updatedAt;
-  
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<PetEntity> pets;
 
-  @PrePersist
-  public void prePersist() {
-    createdAt = Instant.now();
-  }
+  @Column(name = "createdAt", columnDefinition = "TIMESTAMP")
+  @CreatedDate
+  private Instant createdAt;
 
-  @PreUpdate
-  public void preUpdate() {
-    updatedAt = Instant.now();
-  }
-  
+  @Column(name = "updatedAt", columnDefinition = "TIMESTAMP")
+  @LastModifiedDate
+  private Instant updatedAt;
 }
