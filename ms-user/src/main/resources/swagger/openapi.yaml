@@ -145,6 +145,19 @@ components:
         updatedAt:
           type: string
           format: date-time
+    UserEvent:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        referenceId:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum: [CREATE, UPDATE, DELETE]
     Problem:
       type: object
       properties:

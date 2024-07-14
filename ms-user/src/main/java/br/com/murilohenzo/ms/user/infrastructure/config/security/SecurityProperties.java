@@ -1,4 +1,4 @@
-package br.com.murilohenzo.ms.user.infrastructure.config;
+package br.com.murilohenzo.ms.user.infrastructure.config.security;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

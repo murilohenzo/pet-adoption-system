@@ -171,6 +171,7 @@
 								<useBeanValidation>true</useBeanValidation>
 								<useSpringBoot3>true</useSpringBoot3>
 								<useJakartaEe>true</useJakartaEe>
+<!--								<additionalModelTypeAnnotations>@lombok.Builder</additionalModelTypeAnnotations>-->
 							</configOptions>
 							<typeMappings>
 								<typeMapping>OffsetDateTime=LocalDateTime</typeMapping>

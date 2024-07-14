@@ -1,8 +1,10 @@
 package br.com.murilohenzo.ms.user.domain.services;
 
+import br.com.murilohenzo.ms.user.domain.entities.EventType;
 import br.com.murilohenzo.ms.user.domain.entities.User;
 import br.com.murilohenzo.ms.user.domain.exceptions.EntityAlreadyExistsException;
 import br.com.murilohenzo.ms.user.domain.exceptions.EntityNotFoundException;
+import br.com.murilohenzo.ms.user.domain.ports.EventPublisherPort;
 import br.com.murilohenzo.ms.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,8 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final EventPublisherPort eventPublisherPort;
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -36,6 +40,7 @@ public class UserService {
         existsUserWithSameEmail(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = this.userRepository.save(user);
+        eventPublisherPort.publishEvent(user.convertToUserEventRepresentation(), EventType.CREATE);
         return user;
     }
 
@@ -46,7 +51,9 @@ public class UserService {
         foundUser.setFirstName(user.getFirstName());
         foundUser.setLastName(user.getLastName());
         foundUser.setEmail(user.getEmail());
-        return userRepository.save(foundUser);
+        var updatedUser = userRepository.save(foundUser);
+        eventPublisherPort.publishEvent(updatedUser.convertToUserEventRepresentation(), EventType.CREATE);
+        return updatedUser;
     }
 
     @Transactional
@@ -61,6 +68,7 @@ public class UserService {
     @Transactional
     public void deleteUser(User user) {
         this.userRepository.delete(user);
+        eventPublisherPort.publishEvent(user.convertToUserEventRepresentation(), EventType.CREATE);
     }
 
     private void existsUserWithSameEmail(User user) {

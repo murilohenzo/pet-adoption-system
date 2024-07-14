@@ -64,3 +64,12 @@ security:
     - "/actuator/health"
   roles:
     ADMIN: [ "ADMIN_PETS" ]
+
+rabbit:
+  hostname: localhost
+  port: 5672
+  username: guest
+  password: guest
+  routingKey: user.event.routing.key
+  exchangeUserEvent: user.event.exchange
+  eventQueue: user.event.queue
