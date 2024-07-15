@@ -15,5 +15,4 @@ public class UserDomain {
   private String referenceId;
   private Instant createdAt;
   private Instant updatedAt;
-  private Set<PetDomain> pets;
 }

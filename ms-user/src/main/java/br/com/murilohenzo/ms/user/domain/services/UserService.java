@@ -52,7 +52,7 @@ public class UserService {
         foundUser.setLastName(user.getLastName());
         foundUser.setEmail(user.getEmail());
         var updatedUser = userRepository.save(foundUser);
-        eventPublisherPort.publishEvent(updatedUser.convertToUserEventRepresentation(), EventType.CREATE);
+        eventPublisherPort.publishEvent(updatedUser.convertToUserEventRepresentation(), EventType.UPDATE);
         return updatedUser;
     }
 
@@ -68,7 +68,7 @@ public class UserService {
     @Transactional
     public void deleteUser(User user) {
         this.userRepository.delete(user);
-        eventPublisherPort.publishEvent(user.convertToUserEventRepresentation(), EventType.CREATE);
+        eventPublisherPort.publishEvent(user.convertToUserEventRepresentation(), EventType.DELETE);
     }
 
     private void existsUserWithSameEmail(User user) {

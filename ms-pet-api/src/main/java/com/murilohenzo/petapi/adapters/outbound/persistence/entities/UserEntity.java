@@ -5,16 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @Entity(name = "tb_user")
 public class UserEntity {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -27,15 +27,32 @@ public class UserEntity {
 
   @Column(name = "referenceId", unique = true)
   private String referenceId = UUID.randomUUID().toString();
-  
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private Set<PetEntity> pets;
 
   @Column(name = "createdAt", columnDefinition = "TIMESTAMP")
-  @CreatedDate
   private Instant createdAt;
 
   @Column(name = "updatedAt", columnDefinition = "TIMESTAMP")
-  @LastModifiedDate
   private Instant updatedAt;
+
+  @PrePersist
+  public void prePersist() {
+    createdAt = Instant.now();
+  }
+
+  @PreUpdate
+  public void preUpdate() {
+    updatedAt = Instant.now();
+  }
+
+  @Override
+  public String toString() {
+    return "UserEntity{" +
+      "id=" + id +
+      ", username='" + username + '\'' +
+      ", email='" + email + '\'' +
+      ", referenceId='" + referenceId + '\'' +
+      ", createdAt=" + createdAt +
+      ", updatedAt=" + updatedAt +
+      '}';
+  }
 }

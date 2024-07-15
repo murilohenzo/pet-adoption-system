@@ -1,5 +1,6 @@
 package com.murilohenzo.petapi.adapters.outbound.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.murilohenzo.petapi.domain.models.enums.PetGender;
 import com.murilohenzo.petapi.domain.models.enums.PetSpecies;
 import com.murilohenzo.petapi.domain.models.enums.PetStatus;
@@ -17,8 +18,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 @Data
-@Entity(name = "tb_pet")
 @NoArgsConstructor
+@Entity(name = "tb_pet")
 @EntityListeners(AuditingEntityListener.class)
 public class PetEntity {
 
@@ -72,5 +73,25 @@ public class PetEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
+  @JsonBackReference
   private UserEntity user;
+
+  @Override
+  public String toString() {
+    return "PetEntity{" +
+      "id=" + id +
+      ", name='" + name + '\'' +
+      ", description='" + description + '\'' +
+      ", petStatus=" + petStatus +
+      ", petGender=" + petGender +
+      ", petSpecies=" + petSpecies +
+      ", breed='" + breed + '\'' +
+      ", ageMonths=" + ageMonths +
+      ", entryDate=" + entryDate +
+      ", createdAt=" + createdAt +
+      ", updatedAt=" + updatedAt +
+      ", createdBy='" + createdBy + '\'' +
+      ", modifiedBy='" + modifiedBy + '\'' +
+      '}';
+  }
 }

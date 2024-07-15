@@ -1,6 +1,6 @@
 package br.com.murilohenzo.ms.user.infrastructure.config.rabbit;
 
-import br.com.murilohenzo.ms.user.adapters.inbound.queue.UserEventPublisher;
+import br.com.murilohenzo.ms.user.adapters.outbound.queue.UserEventPublisher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;

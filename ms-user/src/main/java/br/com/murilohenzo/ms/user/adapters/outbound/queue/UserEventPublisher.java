@@ -1,4 +1,4 @@
-package br.com.murilohenzo.ms.user.adapters.inbound.queue;
+package br.com.murilohenzo.ms.user.adapters.outbound.queue;
 
 import br.com.murilohenzo.ms.user.domain.entities.EventType;
 import br.com.murilohenzo.ms.user.domain.ports.EventPublisherPort;
@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 @Slf4j
 @RequiredArgsConstructor
-public class UserEventPublisher implements EventPublisherPort {
+public class UserEventPublisher implements EventPublisherPort<UserEventRepresentation> {
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -18,8 +18,8 @@ public class UserEventPublisher implements EventPublisherPort {
 
     @Override
     public void publishEvent(UserEventRepresentation userEventRepresentation, EventType eventType) {
-        log.debug("[D20] - PUBLICANDO EVENTO:{}", userEventRepresentation);
         userEventRepresentation.setEventType(UserEventRepresentation.EventTypeEnum.valueOf(eventType.toString()));
+        log.info("[D20] - PUBLICANDO EVENTO:{}", userEventRepresentation);
         rabbitTemplate.convertAndSend(properties.getExchangeUserEvent(), properties.getRoutingKey(), userEventRepresentation);
     }
 }
