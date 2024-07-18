@@ -3,9 +3,15 @@ package com.murilohenzo.petapi.adapters.outbound.persistence.impl;
 import com.murilohenzo.petapi.adapters.mapper.PetMapper;
 import com.murilohenzo.petapi.adapters.mapper.UserMapper;
 import com.murilohenzo.petapi.adapters.outbound.persistence.PetJpaRepository;
+import com.murilohenzo.petapi.adapters.outbound.persistence.entities.PetEntity;
 import com.murilohenzo.petapi.domain.models.PetDomain;
 import com.murilohenzo.petapi.domain.models.enums.PetStatus;
 import com.murilohenzo.petapi.domain.ports.PetPersistencePort;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -46,6 +52,11 @@ public class PetPersistencePortImpl implements PetPersistencePort {
   }
 
   @Override
+  public void removeUserFromPets(Long userId) {
+    repository.removeUserFromPets(userId);
+  }
+
+  @Override
   public Optional<PetDomain> findById(Long petId) {
     var petEntity = repository.findById(petId);
     return petEntity.map(petMapper::petEntityToPetDomain);
@@ -59,11 +70,6 @@ public class PetPersistencePortImpl implements PetPersistencePort {
   @Override
   public List<PetDomain> findByStatus(PetStatus petStatus) {
     return repository.findByPetStatus(petStatus).stream().map(petMapper::petEntityToPetDomain).toList();
-  }
-
-  @Override
-  public void deletePetByUserId(Long userID) {
-    repository.deletePetByUserId(userID);
   }
 
   @Override

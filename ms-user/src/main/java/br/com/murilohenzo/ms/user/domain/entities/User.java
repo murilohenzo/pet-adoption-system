@@ -1,8 +1,10 @@
 package br.com.murilohenzo.ms.user.domain.entities;
 
+import br.com.murilohenzo.ms.user.presentation.representation.UserEventRepresentation;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -58,4 +60,13 @@ public class User {
     @Column(name = "modifiedBy")
     @LastModifiedBy
     private String modifiedBy;
+
+    public UserEventRepresentation convertToUserEventRepresentation() {
+        UserEventRepresentation userEventRepresentation = new UserEventRepresentation();
+        BeanUtils.copyProperties(this, userEventRepresentation);
+        userEventRepresentation.setUsername(this.getUsername());
+        userEventRepresentation.setEmail(this.getEmail());
+        userEventRepresentation.setReferenceId(UUID.fromString(this.getReferenceId()));
+        return userEventRepresentation;
+    }
 }

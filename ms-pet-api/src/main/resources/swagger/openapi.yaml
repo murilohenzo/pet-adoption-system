@@ -430,6 +430,19 @@ components:
           type: string
           format: date-time
           description: Last update date of the photo
+    UserEvent:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        referenceId:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum: [CREATE, UPDATE, DELETE]
     Problem:
       type: object
       properties:

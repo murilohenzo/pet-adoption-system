@@ -10,11 +10,11 @@ public interface PetPersistencePort {
   
   List<PetDomain> findAll();
   List<PetDomain> findByStatus(PetStatus petStatus);
-  List<PetDomain> findAllByUserId(Long userID);
+  List<PetDomain> findAllByUserId(Long userId);
   Optional<PetDomain> findById(Long id);
   PetDomain save(PetDomain petDomain);
   void saveUserPet(PetDomain petDomain);
   void update(PetDomain pet);
   void deletePetById(Long id);
-  void deletePetByUserId(Long userID);
+  void removeUserFromPets(Long userId);
 }

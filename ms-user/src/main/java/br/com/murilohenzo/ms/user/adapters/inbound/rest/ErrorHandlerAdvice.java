@@ -1,8 +1,8 @@
 package br.com.murilohenzo.ms.user.adapters.inbound.rest;
 
 import br.com.murilohenzo.ms.user.domain.exceptions.EntityAlreadyExistsException;
+import br.com.murilohenzo.ms.user.domain.exceptions.EntityNotFoundException;
 import br.com.murilohenzo.ms.user.presentation.representation.ProblemRepresentation;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

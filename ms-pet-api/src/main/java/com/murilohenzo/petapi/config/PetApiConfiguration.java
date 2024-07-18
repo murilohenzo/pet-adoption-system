@@ -16,6 +16,7 @@ import com.murilohenzo.petapi.domain.ports.StoragePersistencePort;
 import com.murilohenzo.petapi.domain.ports.UserPersistencePort;
 import com.murilohenzo.petapi.domain.services.PetPhotoServicePortImpl;
 import com.murilohenzo.petapi.domain.services.PetServicePortImpl;
+import com.murilohenzo.petapi.domain.services.UserRefServicePortImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +57,11 @@ public class PetApiConfiguration {
   @Bean
   public PetPhotoServicePortImpl petPhotoService(PetPhotoPersistencePort petPhotoRepository, StoragePersistencePort storageRepository) {
     return new PetPhotoServicePortImpl(petPhotoRepository, storageRepository);
+  }
+  
+  @Bean
+  public UserRefServicePortImpl userRefService(UserPersistencePortImpl userPersistencePort, PetPersistencePortImpl petPersistencePort) {
+    return new UserRefServicePortImpl(userPersistencePort, petPersistencePort);
   }
 
   @Bean

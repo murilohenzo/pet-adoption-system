@@ -21,12 +21,18 @@ public class UserPersistencePortImpl implements UserPersistencePort {
   }
 
   @Override
-  public UserDomain save(UserDomain user) {
-    return null;
+  public Optional<UserDomain> findByReferenceId(String referenceId) {
+    var userRef = userRefJpaRepository.findByReferenceId(referenceId);
+    return userRef.map(userMapper::userRefEntityToUserRefDomain);
   }
 
   @Override
-  public void delete(Long userId) {
-    userRefJpaRepository.deleteById(userId);
+  public void save(UserDomain user) {
+    userRefJpaRepository.save(userMapper.userRefDomainToUserRefEntity(user)); 
+  }
+
+  @Override
+  public void delete(String referenceId) {
+    userRefJpaRepository.deleteByReferenceId(referenceId);
   }
 }

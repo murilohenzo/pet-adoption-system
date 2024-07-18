@@ -1,4 +1,4 @@
-package br.com.murilohenzo.ms.user.infrastructure.config;
+package br.com.murilohenzo.ms.user.infrastructure.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

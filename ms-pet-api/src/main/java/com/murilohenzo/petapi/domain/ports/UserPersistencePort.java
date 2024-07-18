@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface UserPersistencePort {
   
   Optional<UserDomain> findById(Long userId);
-  UserDomain save(UserDomain user);
-  void delete(Long userId);  
-  
+  Optional<UserDomain> findByReferenceId(String referenceId);
+  void save(UserDomain user);
+  void delete(String referenceId);
 }

@@ -15,8 +15,8 @@ public class UserRefServicePortImpl {
   private final PetPersistencePort petRepository;
   
   @Transactional
-  public UserDomain save(UserDomain user) {
-    return userRefRepository.save(user);
+  public void save(UserDomain user) {
+    userRefRepository.save(user);
   }
   
   @Transactional(readOnly = true)
@@ -25,8 +25,11 @@ public class UserRefServicePortImpl {
   }
   
   @Transactional
-  public void delete(Long userId) {
-    userRefRepository.delete(userId);
-    petRepository.deletePetByUserId(userId);
+  public void delete(String referenceId) {
+    var user = userRefRepository.findByReferenceId(referenceId);
+    if (user.isPresent()) {
+      petRepository.removeUserFromPets(user.get().getId());
+      userRefRepository.delete(referenceId);
+    }
   }
 }
